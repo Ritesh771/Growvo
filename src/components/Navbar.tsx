@@ -1,33 +1,54 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import growvoLogo from "@/assets/growvo-logo.png";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const location = useLocation();
+  const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
+
+      // Update active section based on scroll position
+      const sections = ["home", "about", "services", "portfolio", "career", "contact"];
+      const current = sections.find(section => {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          return rect.top <= 100 && rect.bottom >= 100;
+        }
+        return false;
+      });
+      if (current) setActiveSection(current);
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navigation = [
-    { name: "Home", path: "/" },
-    { name: "Services", path: "/services" },
-    { name: "Portfolio", path: "/portfolio" },
-    { name: "Career", path: "/career" },
-    { name: "About", path: "/about" },
-    { name: "Contact", path: "/contact" },
+    { name: "Home", path: "#home" },
+    { name: "About", path: "#about" },
+    { name: "Services", path: "#services" },
+    { name: "Portfolio", path: "#portfolio" },
+    { name: "Pricing", path: "#pricing" },
+    { name: "Career", path: "#career" },
+    { name: "Contact", path: "#contact" },
   ];
 
-  const isActive = (path: string) => location.pathname === path;
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId.replace('#', ''));
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    setIsMenuOpen(false);
+  };
+
+  const isActive = (path: string) => `#${activeSection}` === path;
 
   return (
     <motion.nav 
@@ -42,10 +63,10 @@ const Navbar = () => {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 hover:scale-105 transition-transform">
-            <img src={growvoLogo} alt="Growvo" className="h-8 w-8 rounded-lg" />
-            <span className="text-2xl font-bold gradient-text">Growvo</span>
-          </Link>
+          <button onClick={() => scrollToSection('#home')} className="flex items-center gap-3 hover:scale-105 transition-transform">
+            <img src={growvoLogo} alt="Ritesh N" className="h-8 w-8 rounded-lg" />
+            <span className="text-2xl font-bold gradient-text">Ritesh N</span>
+          </button>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
@@ -56,8 +77,8 @@ const Navbar = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Link
-                  to={item.path}
+                <button
+                  onClick={() => scrollToSection(item.path)}
                   className={`relative py-2 px-1 text-sm font-medium transition-smooth ${
                     isActive(item.path)
                       ? "gradient-text"
@@ -72,7 +93,7 @@ const Navbar = () => {
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     />
                   )}
-                </Link>
+                </button>
               </motion.div>
             ))}
             <motion.div
@@ -85,9 +106,9 @@ const Navbar = () => {
               <Button 
                 variant="default" 
                 className="btn-gradient hover:shadow-hover transition-smooth"
-                asChild
+                onClick={() => scrollToSection('#contact')}
               >
-                <Link to="/contact">Get Started</Link>
+                Get Started
               </Button>
             </motion.div>
           </div>
@@ -123,17 +144,16 @@ const Navbar = () => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
                   >
-                    <Link
-                      to={item.path}
-                      className={`py-2 text-base font-medium transition-smooth ${
+                    <button
+                      onClick={() => scrollToSection(item.path)}
+                      className={`py-2 text-base font-medium transition-smooth text-left ${
                         isActive(item.path)
                           ? "gradient-text"
                           : "text-foreground hover:text-primary"
                       }`}
-                      onClick={() => setIsMenuOpen(false)}
                     >
                       {item.name}
-                    </Link>
+                    </button>
                   </motion.div>
                 ))}
                 <motion.div
@@ -144,10 +164,9 @@ const Navbar = () => {
                   <Button 
                     variant="default" 
                     className="btn-gradient w-full mt-4"
-                    asChild
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={() => scrollToSection('#contact')}
                   >
-                    <Link to="/contact">Get Started</Link>
+                    Get Started
                   </Button>
                 </motion.div>
               </div>

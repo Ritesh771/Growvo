@@ -1,9 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Check, Star } from "lucide-react";
-import { Link } from "react-router-dom";
 
 const PricingTable = () => {
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId.replace('#', ''));
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   const plans = [
     {
       name: "Small",
@@ -125,9 +130,9 @@ const PricingTable = () => {
                       : 'border-2 border-primary/30 hover:border-primary hover:bg-primary/5'
                   }`}
                   variant={plan.popular ? "default" : "outline"}
-                  asChild
+                  onClick={() => scrollToSection('#contact')}
                 >
-                  <Link to="/contact">Get Started</Link>
+                  Get Started
                 </Button>
               </div>
             </Card>
@@ -143,9 +148,9 @@ const PricingTable = () => {
             variant="outline"
             size="lg"
             className="border-2 border-primary/30 hover:border-primary hover:bg-primary/5 transition-smooth"
-            asChild
+            onClick={() => scrollToSection('#contact')}
           >
-            <Link to="/contact">Request Custom Quote</Link>
+            Request Custom Quote
           </Button>
         </div>
       </div>

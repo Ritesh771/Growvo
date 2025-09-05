@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, LucideIcon } from "lucide-react";
-import { Link } from "react-router-dom";
 
 interface ServiceCardProps {
   title: string;
@@ -13,6 +12,13 @@ interface ServiceCardProps {
 }
 
 const ServiceCard = ({ title, description, price, icon: Icon, features, href }: ServiceCardProps) => {
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId.replace('#', ''));
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <Card className="relative overflow-hidden group hover:shadow-hover transition-smooth hover:-translate-y-2 card-gradient border border-white/20">
       {/* Glow effect */}
@@ -49,12 +55,10 @@ const ServiceCard = ({ title, description, price, icon: Icon, features, href }: 
         {/* CTA */}
         <Button 
           className="w-full btn-gradient hover:shadow-hover transition-smooth group"
-          asChild
+          onClick={() => scrollToSection(href)}
         >
-          <Link to={href} className="flex items-center justify-center gap-2">
-            Get Started
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
+          Get Started
+          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform ml-2" />
         </Button>
       </div>
     </Card>

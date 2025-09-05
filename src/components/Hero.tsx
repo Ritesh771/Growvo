@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useParallax } from "@/hooks/useScrollAnimation";
 import { AnimatedText } from "@/components/AnimatedText";
@@ -95,28 +94,28 @@ const Hero = () => {
           </ScrollReveal>
 
           {/* Main headline with text reveal animation */}
-          <div className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-            <AnimatedText text="Affordable " />
-            <AnimatedText 
-              text="Web, App, AI " 
-              className="gradient-text inline-block"
-              delay={0.3}
-            />
-            <AnimatedText text="& " delay={0.6} />
-            <AnimatedText 
-              text="Career " 
-              className="gradient-text inline-block"
-              delay={0.7}
-            />
-            <AnimatedText text="Solutions" delay={1} />
-          </div>
+                            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+                    <AnimatedText text="Affordable " />
+                    <AnimatedText 
+                      text="Web, App, AI " 
+                      className="gradient-text inline-block"
+                      delay={0.3}
+                    />
+                    <AnimatedText text="& " delay={0.6} />
+                    <AnimatedText 
+                      text="Career " 
+                      className="gradient-text inline-block"
+                      delay={0.7}
+                    />
+                    <AnimatedText text="Solutions" delay={1} />
+                  </h1>
 
           {/* Subheading */}
           <ScrollReveal delay={0.8}>
-            <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
-              Choose from small, medium, and large project packages or request a custom solution. 
-              Professional development and career services tailored to your needs.
-            </p>
+                              <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
+                    Choose from small, medium, and large project packages or request a custom solution. 
+                    Professional development and career services tailored to your needs.
+                  </p>
           </ScrollReveal>
 
           {/* CTA Buttons */}
@@ -129,17 +128,18 @@ const Hero = () => {
                 <Button 
                   size="lg" 
                   className="btn-gradient text-lg px-8 py-6 rounded-2xl hover:shadow-hover transition-smooth group"
-                  asChild
+                  onClick={() => {
+                    const element = document.getElementById('services');
+                    element?.scrollIntoView({ behavior: 'smooth' });
+                  }}
                 >
-                  <Link to="/services" className="flex items-center gap-2">
-                    View Services
-                    <motion.div
-                      animate={{ x: [0, 5, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                    >
-                      <ArrowRight className="w-5 h-5" />
-                    </motion.div>
-                  </Link>
+                  View Services
+                  <motion.div
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  >
+                    <ArrowRight className="w-5 h-5" />
+                  </motion.div>
                 </Button>
               </motion.div>
               
@@ -151,9 +151,12 @@ const Hero = () => {
                   size="lg" 
                   variant="outline"
                   className="text-lg px-8 py-6 rounded-2xl border-2 border-primary/30 hover:border-primary hover:bg-primary/5 transition-smooth"
-                  asChild
+                  onClick={() => {
+                    const element = document.getElementById('contact');
+                    element?.scrollIntoView({ behavior: 'smooth' });
+                  }}
                 >
-                  <Link to="/contact">Contact Me</Link>
+                  Contact Me
                 </Button>
               </motion.div>
             </div>
@@ -163,8 +166,8 @@ const Hero = () => {
           <ScrollReveal delay={1.6}>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 max-w-2xl mx-auto">
               {[
-                { value: "50+", label: "Projects Completed" },
-                { value: "5+", label: "Years Experience" },
+                { value: "10+", label: "Projects Completed" },
+                { value: "2+", label: "Years Experience" },
                 { value: "100%", label: "Client Satisfaction" },
                 { value: "24h", label: "Response Time" }
               ].map((stat, index) => (
