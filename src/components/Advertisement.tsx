@@ -139,7 +139,7 @@ const Advertisement = () => {
                 </DialogTitle>
 
                 <DialogDescription className="text-base sm:text-lg text-blue-100 font-semibold text-center">
-                             High Demand Period - Major Projects Alert!
+                             High Demand - Major Projects Alert!
                 </DialogDescription>
               </DialogHeader>
 
