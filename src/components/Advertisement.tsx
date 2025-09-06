@@ -6,6 +6,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,7 +19,8 @@ import {
   Gift,
   Rocket,
   Target,
-  TrendingUp
+  TrendingUp,
+  X,
 } from "lucide-react";
 
 const Advertisement = () => {
@@ -76,9 +78,9 @@ const Advertisement = () => {
     <AnimatePresence>
       {isOpen && (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogContent className="sm:max-w-lg border-0 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white overflow-hidden">
+          <DialogContent className="w-full max-w-xs sm:max-w-lg border-0 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white overflow-hidden p-2 sm:p-6 rounded-xl">
             {/* Animated background elements */}
-            <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
               <motion.div
                 className="absolute -top-10 -right-10 w-32 h-32 bg-yellow-400 rounded-full opacity-20"
                 animate={{
@@ -111,7 +113,7 @@ const Advertisement = () => {
               transition={{ duration: 0.6 }}
               className="relative z-10"
             >
-              <DialogHeader className="text-center">
+              <DialogHeader className="text-center px-2 sm:px-0">
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
@@ -130,13 +132,13 @@ const Advertisement = () => {
                   </div>
                 </motion.div>
 
-                <DialogTitle className="flex items-center justify-center gap-3 text-3xl font-bold bg-gradient-to-r from-yellow-400 to-pink-400 bg-clip-text text-transparent">
+                <DialogTitle className="flex items-center justify-center gap-2 sm:gap-3 text-2xl sm:text-3xl font-bold bg-gradient-to-r from-yellow-400 to-pink-400 bg-clip-text text-transparent">
                   
                   MEGA DEAL!
                   
                 </DialogTitle>
 
-                <DialogDescription className="text-lg text-blue-100 font-semibold text-center">
+                <DialogDescription className="text-base sm:text-lg text-blue-100 font-semibold text-center">
                              High Demand Period - Major Projects Alert!
                 </DialogDescription>
               </DialogHeader>
@@ -145,26 +147,26 @@ const Advertisement = () => {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.4, duration: 0.5 }}
-                className="flex flex-col items-center space-y-6 py-6"
+                className="flex flex-col items-center space-y-4 sm:space-y-6 py-4 sm:py-6"
               >
                 {/* Main discount badge */}
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Badge className="text-2xl px-6 py-3 bg-gradient-to-r from-red-500 to-orange-500 text-white border-0 shadow-2xl animate-pulse">
+                  <Badge className="text-lg sm:text-2xl px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-red-500 to-orange-500 text-white border-0 shadow-2xl animate-pulse">
                     
                     30% OFF ON EVERYTHING!
                   </Badge>
                 </motion.div>
 
                 {/* Features list */}
-                <div className="grid grid-cols-2 gap-3 w-full">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 w-full">
                   <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.6 }}
-                    className="flex items-center gap-2 bg-white/10 rounded-lg p-3 backdrop-blur-sm"
+                    className="flex items-center gap-2 bg-white/10 rounded-lg p-2 sm:p-3 backdrop-blur-sm"
                   >
                     <Target className="h-5 w-5 text-green-400" />
                     <span className="text-sm font-medium">Premium Components</span>
@@ -174,7 +176,7 @@ const Advertisement = () => {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.7 }}
-                    className="flex items-center gap-2 bg-white/10 rounded-lg p-3 backdrop-blur-sm"
+                    className="flex items-center gap-2 bg-white/10 rounded-lg p-2 sm:p-3 backdrop-blur-sm"
                   >
                     <TrendingUp className="h-5 w-5 text-blue-400" />
                     <span className="text-sm font-medium">Expert Services</span>
@@ -184,7 +186,7 @@ const Advertisement = () => {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.8 }}
-                    className="flex items-center gap-2 bg-white/10 rounded-lg p-3 backdrop-blur-sm"
+                    className="flex items-center gap-2 bg-white/10 rounded-lg p-2 sm:p-3 backdrop-blur-sm"
                   >
                     <Star className="h-5 w-5 text-yellow-400" />
                     <span className="text-sm font-medium">Priority Support</span>
@@ -194,7 +196,7 @@ const Advertisement = () => {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.9 }}
-                    className="flex items-center gap-2 bg-white/10 rounded-lg p-3 backdrop-blur-sm"
+                    className="flex items-center gap-2 bg-white/10 rounded-lg p-2 sm:p-3 backdrop-blur-sm"
                   >
                     <Clock className="h-5 w-5 text-purple-400" />
                     <span className="text-sm font-medium">Fast Delivery</span>
@@ -206,13 +208,13 @@ const Advertisement = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.0 }}
-                  className="bg-red-600/20 rounded-lg p-4 text-center border border-red-400/30"
+                  className="bg-red-600/20 rounded-lg p-2 sm:p-4 text-center border border-red-400/30"
                 >
                   <div className="flex items-center justify-center gap-2 mb-2">
                     <Clock className="h-5 w-5 text-red-400" />
                     <span className="text-red-300 font-semibold">Limited Time Offer!</span>
                   </div>
-                  <div className="text-2xl font-bold text-white font-mono">
+                  <div className="text-lg sm:text-2xl font-bold text-white font-mono">
                     {formatTime(timeLeft)}
                   </div>
                   <p className="text-xs text-red-200 mt-1">Time remaining to claim</p>
@@ -222,7 +224,7 @@ const Advertisement = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1.1 }}
-                  className="text-center text-blue-100 leading-relaxed"
+                  className="text-center text-blue-100 leading-relaxed text-sm sm:text-base px-1"
                 >
                   🔥 Perfect timing for your major projects! Get professional components and expert services at unbeatable prices during this high-demand period.
                 </motion.p>
@@ -231,21 +233,23 @@ const Advertisement = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.2 }}
-                  className="flex gap-3 w-full"
+                  className="flex flex-col gap-3 w-full items-center"
                 >
                   <Button
-                    onClick={handleClose}
-                    variant="outline"
-                    className="flex-1 border-white/30 text-white bg-white/5 hover:bg-white/10 hover:text-white"
-                  >
-                    Maybe Later
-                  </Button>
-                  <Button
                     onClick={handleClaim}
-                    className="flex-1 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-bold shadow-lg transform hover:scale-105 transition-all duration-200"
+                    className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-bold shadow-lg transform hover:scale-105 transition-all duration-200"
                   >
                     
                     CLAIM NOW!
+                  </Button>
+                  <Button
+                    onClick={handleClose}
+                    variant="ghost"
+                    size="sm"
+                    className="text-white hover:bg-white/10"
+                  >
+                    <X className="h-4 w-4 mr-2" />
+                    Close
                   </Button>
                 </motion.div>
               </motion.div>

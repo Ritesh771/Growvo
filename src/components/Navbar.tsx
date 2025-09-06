@@ -154,7 +154,7 @@ const Navbar = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden"
+            className="md:hidden touch-manipulation"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X /> : <Menu />}
@@ -162,55 +162,33 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Navigation */}
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{
-            opacity: isMenuOpen ? 1 : 0,
-            height: isMenuOpen ? "auto" : 0
-          }}
-          transition={{ duration: 0.3 }}
-          className="md:hidden overflow-hidden"
-        >
-          {isMenuOpen && (
-            <div className="mt-4 pb-4 border-t border-white/10 pt-4">
-              <div className="flex flex-col space-y-3">
-                {navigation.map((item, index) => (
-                  <motion.div
-                    key={item.name}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    <button
-                      onClick={() => scrollToSection(item.path)}
-                      className={`py-1.5 text-sm font-medium transition-smooth text-left ${
-                        isActive(item.path)
-                          ? "gradient-text"
-                          : "text-foreground hover:text-primary"
-                      }`}
-                    >
-                      {item.name}
-                    </button>
-                  </motion.div>
-                ))}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
+        {isMenuOpen && (
+          <div className="md:hidden mt-4 pb-4 border-t border-white/10 pt-4">
+            <div className="flex flex-col space-y-3">
+              {navigation.map((item, index) => (
+                <button
+                  key={item.name}
+                  onClick={() => scrollToSection(item.path)}
+                  className={`py-1.5 text-sm font-medium transition-smooth text-left w-full ${
+                    isActive(item.path)
+                      ? "gradient-text"
+                      : "text-foreground hover:text-primary"
+                  }`}
                 >
-                  <Button
-                    variant="default"
-                    size="sm"
-                    className="btn-gradient w-full mt-3"
-                    onClick={() => scrollToSection('#contact')}
-                  >
-                    Get Started
-                  </Button>
-                </motion.div>
-              </div>
+                  {item.name}
+                </button>
+              ))}
+              <Button
+                variant="default"
+                size="sm"
+                className="btn-gradient w-full mt-3"
+                onClick={() => scrollToSection('#contact')}
+              >
+                Get Started
+              </Button>
             </div>
-          )}
-        </motion.div>
+          </div>
+        )}
       </div>
     </motion.nav>
   );
