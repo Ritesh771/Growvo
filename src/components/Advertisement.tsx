@@ -26,9 +26,6 @@ const Advertisement = () => {
   const [timeLeft, setTimeLeft] = useState(27 * 24 * 60 * 60); // 27 days in seconds
 
   useEffect(() => {
-    // Show advertisement on every page load/reload
-    setIsOpen(true);
-
     // Get or set end time in localStorage
     const endTimeKey = 'adEndTime';
     let endTime: number;
@@ -43,6 +40,11 @@ const Advertisement = () => {
     // Calculate initial time left
     const initialTimeLeft = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
     setTimeLeft(initialTimeLeft);
+
+    // Show advertisement only if time hasn't expired
+    if (initialTimeLeft > 0) {
+      setIsOpen(true);
+    }
 
     // Countdown timer
     const timer = setInterval(() => {
