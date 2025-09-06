@@ -50,7 +50,7 @@ const About = () => {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               {/* Profile Image */}
               <div className="relative">
-                <div className="w-80 h-80 mx-auto rounded-3xl overflow-hidden shadow-card">
+                <div className="w-64 h-64 md:w-80 md:h-80 mx-auto rounded-3xl overflow-hidden shadow-card">
                   <img 
                     src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face"
                     alt="Profile"

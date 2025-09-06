@@ -8,7 +8,7 @@ const Services = () => {
     {
       title: "Web Development",
       description: "Full-stack web applications with modern technologies like React, Django, and Node.js.",
-      price: "₹15,000",
+      price: "₹7000",
       icon: Code,
       features: [
         "Responsive design",
@@ -17,26 +17,30 @@ const Services = () => {
         "API development",
         "SEO optimization"
       ],
-      href: "/contact"
+      href: "/contact",
+      color: "#2563eb",
+      hoverColor: "#1e40af"
     },
     {
       title: "Mobile Apps", 
       description: "Cross-platform mobile applications with React Native and Flutter.",
-      price: "₹25,000",
+      price: "₹15000",
       icon: Smartphone,
       features: [
         "iOS & Android",
         "Native performance",
         "Push notifications",
-        "App store deployment",
+        "App store deployment (Extra cost)",
         "Backend integration"
       ],
-      href: "/contact"
+      href: "/contact",
+      color: "#059669",
+      hoverColor: "#047857"
     },
     {
       title: "AI/ML Solutions",
       description: "Intelligent applications with machine learning and artificial intelligence.",
-      price: "₹35,000",
+      price: "₹20000",
       icon: Brain,
       features: [
         "Custom AI models",
@@ -45,7 +49,9 @@ const Services = () => {
         "API integration",
         "Cloud deployment"
       ],
-      href: "/contact"
+      href: "/contact",
+      color: "#d97706",
+      hoverColor: "#b45309"
     },
     {
       title: "Career Services",
@@ -59,7 +65,9 @@ const Services = () => {
         "Interview coaching",
         "Placement guidance"
       ],
-      href: "/career"
+      href: "/career",
+      color: "#db2777",
+      hoverColor: "#be185d"
     }
   ];
 

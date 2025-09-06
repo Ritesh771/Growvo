@@ -1,23 +1,26 @@
 import { useEffect, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import { ScrollReveal } from "@/components/ScrollReveal";
-import { MultiLayerParallax, ParallaxLayer } from "@/components/MultiLayerParallax";
-import ColorShiftBackground from "@/components/ColorShiftBackground";
-import TiltCard from "@/components/TiltCard";
-import TextScramble from "@/components/TextScramble";
-import SplitTextReveal from "@/components/SplitTextReveal";
-import ScrollMarquee from "@/components/ScrollMarquee";
+import { StickySection } from "@/components/StickySection";
+import { AnimatedText } from "@/components/AnimatedText";
+import { ImageMaskReveal } from "@/components/ImageMaskReveal";
 import { Button } from "@/components/ui/button";
 import ServiceCard from "@/components/ServiceCard";
 import ProjectCard from "@/components/ProjectCard";
 import PricingTable from "@/components/PricingTable";
 import { Card } from "@/components/ui/card";
-import { Code, Smartphone, Brain, Briefcase, Award, Users, GraduationCap, Star, Mail, Phone, MapPin, Github, Linkedin, Twitter } from "lucide-react";
+import NewContactSection from "@/components/NewContactSection";
+import { ArrowRight, Sparkles, Zap, Target, Code, Smartphone, Brain, Briefcase, Award, Users, GraduationCap, Star, Mail, Phone, MapPin, Github, Linkedin, Twitter, FileText, Mic, Server, TabletSmartphone, BrainCircuit } from "lucide-react";
+import LazyImage from "@/components/LazyImage";
 import { useState } from "react";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
+import growvoLogo from "@/assets/growvo-logo.png";
+import Footer from "@/components/Footer";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,10 +28,51 @@ const SinglePagePortfolio = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeFilter, setActiveFilter] = useState("All");
 
+  const plugin = useRef(
+    Autoplay({ delay: 2000, stopOnInteraction: true })
+  );
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
   });
+
+  const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.8, 0.6]);
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6
+      }
+    }
+  };
+
+  const fadeInVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8
+      }
+    }
+  };
 
   useEffect(() => {
     // Initialize GSAP ScrollTrigger
@@ -41,6 +85,62 @@ const SinglePagePortfolio = () => {
           trigger: ".parallax-bg",
           start: "top bottom",
           end: "bottom top",
+          scrub: true
+        }
+      });
+
+      gsap.to(".parallax-mid", {
+        yPercent: -25,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".parallax-mid",
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true
+        }
+      });
+
+      // Text scramble effect
+      const textElements = gsap.utils.toArray(".scramble-text");
+      textElements.forEach((element: Element) => {
+        const originalText = element.textContent;
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+
+        gsap.to(element, {
+          duration: 2,
+          textContent: originalText,
+          ease: "none",
+          onUpdate: function() {
+            const progress = this.progress();
+            let scrambled = "";
+            for (let i = 0; i < originalText.length; i++) {
+              if (i < progress * originalText.length) {
+                scrambled += originalText[i];
+              } else {
+                scrambled += chars[Math.floor(Math.random() * chars.length)];
+              }
+            }
+            element.textContent = scrambled;
+          },
+          scrollTrigger: {
+            trigger: element,
+            start: "top 80%",
+            end: "bottom 20%",
+            scrub: true
+          }
+        });
+      });
+
+      // SVG line drawing
+      gsap.fromTo(".svg-path", {
+        drawSVG: "0%"
+      }, {
+        drawSVG: "100%",
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".svg-path",
+          start: "top center",
+          end: "bottom center",
           scrub: true
         }
       });
@@ -58,6 +158,147 @@ const SinglePagePortfolio = () => {
         }
       });
 
+      // Scroll progress bar
+      gsap.to(".progress-bar", {
+        scaleX: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: "body",
+          start: "top top",
+          end: "bottom bottom",
+          scrub: true
+        }
+      });
+
+      // Pinned Scroll Animation for Technical Expertise Cards
+      const pinnedContainer = document.querySelector('.sticky-card-container') as HTMLElement;
+      const cardWrapper = document.querySelector('.card-wrapper') as HTMLElement;
+      const cards = gsap.utils.toArray('.card-item') as HTMLElement[];
+
+      if (pinnedContainer && cardWrapper && cards.length > 0) {
+        // Create a timeline for the pinned animation
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: pinnedContainer,
+            start: "top 100px", // Start when container reaches 100px from top (below navbar)
+            end: "+=200%", // Increased scroll distance for all cards to show properly
+            pin: true,
+            scrub: 0.5, // Smoother scrubbing for better control
+            anticipatePin: 1,
+            markers: false,
+          }
+        });
+
+        // Set initial state - first card visible and centered
+        tl.set(cards[0], {
+          opacity: 1,
+          scale: 1,
+          zIndex: 10,
+          transformOrigin: "center center"
+        });
+
+        // Hide all other cards initially
+        cards.forEach((card, index) => {
+          if (index > 0) {
+            tl.set(card, {
+              opacity: 0,
+              scale: 0.95,
+              zIndex: 1
+            });
+          }
+        });
+
+        // Animate through each card with proper timing
+        cards.forEach((card, index) => {
+          if (index === 0) return; // Skip first card as it's already set
+
+          // Calculate position in timeline (evenly distributed)
+          const position = (index / cards.length) * 0.85;
+
+          // First, fade out the previous card completely
+          tl.to(cards[index - 1], {
+            opacity: 0,
+            scale: 0.8,
+            zIndex: 1,
+            duration: 0.5,
+            ease: "power2.inOut"
+          }, position)
+          // Then fade in the current card
+          .to(card, {
+            opacity: 1,
+            scale: 1,
+            zIndex: 10,
+            duration: 0.5,
+            ease: "power2.inOut"
+          }, position + 0.1); // Slight delay to ensure clean transition
+        });
+
+                // Keep the last card visible for a bit
+        tl.to({}, { duration: 0.3 });
+      }
+
+      // Additional scroll animations
+      gsap.to(".fade-in-up", {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ".fade-in-up",
+          start: "top 80%",
+          end: "bottom 20%",
+          toggleActions: "play none none reverse"
+        }
+      });
+
+      gsap.to(".scale-in", {
+        scale: 1,
+        opacity: 1,
+        duration: 0.8,
+        ease: "back.out(1.7)",
+        scrollTrigger: {
+          trigger: ".scale-in",
+          start: "top 85%",
+          end: "bottom 15%",
+          toggleActions: "play none none reverse"
+        }
+      });
+
+      // Stagger animations for lists
+      gsap.utils.toArray(".stagger-item").forEach((item, index) => {
+        gsap.fromTo(item as Element, 
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            delay: index * 0.1,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: item as Element,
+              start: "top 85%",
+              end: "bottom 15%",
+              toggleActions: "play none none reverse"
+            }
+          }
+        );
+      });
+
+      // Floating animation for decorative elements
+      gsap.to(".float", {
+        y: -10,
+        duration: 2,
+        ease: "power2.inOut",
+        yoyo: true,
+        repeat: -1,
+        scrollTrigger: {
+          trigger: ".float",
+          start: "top 90%",
+          end: "bottom 10%",
+          toggleActions: "play pause resume pause"
+        }
+      });
+
     }, containerRef);
 
     return () => ctx.revert();
@@ -67,8 +308,8 @@ const SinglePagePortfolio = () => {
     {
       title: "Web Development",
       description: "Full-stack web applications with modern technologies like React, Django, and Node.js.",
-      price: "₹15,000",
-      icon: Code,
+      price: "₹7000",
+      icon: Server,
       features: [
         "Responsive design",
         "Modern frameworks",
@@ -76,13 +317,15 @@ const SinglePagePortfolio = () => {
         "API development",
         "SEO optimization"
       ],
-      href: "#contact"
+      href: "https://wa.me/918660144040?text=Hi%20Ritesh,%20I%20am%20interested%20in%20your%20Web%20Development%20services.%20I%20would%20like%20to%20discuss%20a%20project%20that%20requires%20full-stack%20development%20with%20modern%20technologies.%20Could%20we%20schedule%20a%20consultation%20to%20discuss%20the%20requirements%20and%20timeline%20for%20my%20project?",
+      color: "bg-gradient-to-br from-blue-50 to-indigo-50",
+      hoverColor: "hover:from-blue-100 hover:to-indigo-100"
     },
     {
       title: "Mobile Apps",
       description: "Cross-platform mobile applications with React Native and Flutter.",
-      price: "₹25,000",
-      icon: Smartphone,
+      price: "₹15,000",
+      icon: TabletSmartphone,
       features: [
         "iOS & Android",
         "Native performance",
@@ -90,12 +333,14 @@ const SinglePagePortfolio = () => {
         "App store deployment",
         "Backend integration"
       ],
-      href: "#contact"
+      href: "https://wa.me/918660144040?text=Hello%20Ritesh,%20I%20need%20a%20mobile%20application%20developed.%20I%20am%20looking%20for%20cross-platform%20development%20with%20React%20Native%20or%20Flutter.%20The%20app%20should%20work%20seamlessly%20on%20both%20iOS%20and%20Android.%20Can%20we%20discuss%20the%20features,%20timeline,%20and%20cost%20estimation%20for%20my%20mobile%20app%20project?",
+      color: "bg-gradient-to-br from-green-50 to-emerald-50",
+      hoverColor: "hover:from-green-100 hover:to-emerald-100"
     },
     {
       title: "AI/ML Solutions",
       description: "Intelligent applications with machine learning and artificial intelligence.",
-      price: "₹35,000",
+      price: "₹20,000",
       icon: Brain,
       features: [
         "Custom AI models",
@@ -104,13 +349,15 @@ const SinglePagePortfolio = () => {
         "API integration",
         "Cloud deployment"
       ],
-      href: "#contact"
+      href: "https://wa.me/918660144040?text=Hi%20Ritesh,%20I%20am%20interested%20in%20AI/ML%20solutions%20for%20my%20project.%20I%20need%20intelligent%20applications%20with%20machine%20learning%20capabilities.%20This%20could%20include%20custom%20AI%20models,%20data%20analysis,%20or%20automation%20solutions.%20Could%20you%20please%20share%20more%20details%20about%20your%20AI/ML%20services%20and%20how%20we%20can%20collaborate%20on%20this?",
+      color: "bg-gradient-to-br from-purple-50 to-violet-50",
+      hoverColor: "hover:from-purple-100 hover:to-violet-100"
     },
     {
       title: "Career Services",
       description: "Professional career development and placement assistance.",
       price: "₹5,000",
-      icon: Briefcase,
+      icon: Users,
       features: [
         "Resume design",
         "LinkedIn optimization",
@@ -118,55 +365,103 @@ const SinglePagePortfolio = () => {
         "Interview coaching",
         "Placement guidance"
       ],
-      href: "#career"
+      href: "https://wa.me/918660144040?text=Hello%20Ritesh,%20I%20am%20looking%20for%20career%20development%20services.%20I%20need%20help%20with%20resume%20design,%20LinkedIn%20optimization,%20and%20interview%20preparation.%20I%20would%20also%20like%20guidance%20on%20job%20placement%20and%20career%20advancement.%20Can%20we%20schedule%20a%20session%20to%20discuss%20how%20you%20can%20assist%20me%20with%20my%20career%20goals?",
+      color: "bg-gradient-to-br from-orange-50 to-amber-50",
+      hoverColor: "hover:from-orange-100 hover:to-amber-100"
     }
   ];
 
   const projects = [
     {
       title: "E-commerce Platform",
-      description: "Full-stack e-commerce solution with React, Node.js, and MongoDB. Features include payment integration, admin dashboard, and inventory management.",
+      description: "Full-stack e-commerce solution with Realtime Chat, Payment Gateway Integration.",
       image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600",
       technologies: ["React", "Node.js", "MongoDB", "Stripe"],
       githubUrl: "https://github.com",
       demoUrl: "https://demo.com",
       category: "Web Development"
     },
-    {
-      title: "AI Task Manager",
-      description: "Smart task management app with AI-powered priority suggestions and automated scheduling using machine learning algorithms.",
-      image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=600",
-      technologies: ["Python", "TensorFlow", "React", "FastAPI"],
-      githubUrl: "https://github.com",
-      demoUrl: "https://demo.com",
-      category: "AI/ML"
-    },
-    {
-      title: "Fitness Tracking App",
-      description: "Cross-platform mobile app for fitness tracking with React Native. Includes workout plans, progress tracking, and social features.",
-      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600",
-      technologies: ["React Native", "Firebase", "Redux"],
-      githubUrl: "https://github.com",
-      demoUrl: "https://demo.com",
-      category: "Mobile Apps"
-    },
-    {
-      title: "Professional Portfolio",
-      description: "Modern portfolio website for a software engineer with career services integration and responsive design.",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600",
-      technologies: ["React", "Tailwind", "Framer Motion"],
-      githubUrl: "https://github.com",
-      demoUrl: "https://demo.com",
-      category: "Career Services"
-    },
+    
     {
       title: "Real Estate Platform",
-      description: "Property listing and management platform with advanced search, virtual tours, and CRM integration.",
+      description: "Property listing and management platform with advanced search, virtual tours.",
       image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600",
       technologies: ["Next.js", "PostgreSQL", "Prisma", "AWS"],
       githubUrl: "https://github.com",
       demoUrl: "https://demo.com",
       category: "Web Development"
+    },
+    {
+      title: "Safe Space (Mobile App)",
+      description: "Mobile app with location tracking, panic button, and emergency alerts",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400",
+      technologies: ["React.js", "Django", "PostgreSQL"],
+      githubUrl: "#",
+      demoUrl: "#",
+      category: "Mobile Apps"
+    },
+    {
+      title: "Slot Booking Platform",
+      description: "Online slot booking system for sports with Razorpay integration",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400",
+      technologies: ["React.js", "Django", "PostgreSQL"],
+      githubUrl: "#",
+      demoUrl: "#",
+      category: "Web Development"
+    },
+    {
+      title: "AI Surveillance System",
+      description: "Real-time detection of suspicious activity using Python & Flask",
+      image: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400",
+      technologies: ["Flask", "MySQL", "Redis"],
+      githubUrl: "#",
+      demoUrl: "#",
+      category: "AI/ML"
+    },
+    {
+      title: "VR Navigation for Blind",
+      description: "TensorFlow-based navigation system providing audio cues",
+      image: "https://images.unsplash.com/photo-1589254065878-42c9da997008?w=400",
+      technologies: ["Python", "Flask", "TensorFlow"],
+      githubUrl: "#",
+      demoUrl: "#",
+      category: "AI/ML"
+    },
+    {
+      title: "GitSolveAI",
+      description: "AI-powered platform for automated GitHub issue resolution and CI/CD workflows.",
+      image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=400",
+      technologies: ["React", "Node.js", "GitHub API", "CI/CD"],
+      githubUrl: "#",
+      demoUrl: "#",
+      category: "AI/ML"
+    },
+    {
+      title: "Chat2DB",
+      description: "Natural language database chat for querying databases in plain English.",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400",
+      technologies: ["React", "Node.js", "SQL", "NLP"],
+      githubUrl: "#",
+      demoUrl: "#",
+      category: "AI/ML"
+    },
+    {
+      title: "AR-Based Technical Support",
+      description: "Augmented reality platform for remote technical support in manufacturing and IoT.",
+      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400",
+      technologies: ["React Native", "AR/VR", "IoT", "WebRTC"],
+      githubUrl: "#",
+      demoUrl: "#",
+      category: "AI/ML"
+    },
+    {
+      title: "AI Lawyer",
+      description: "AI-powered legal advice chatbot for contracts, agreements, and legal predictions.",
+      image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=400",
+      technologies: ["React", "Node.js", "NLP", "Legal AI"],
+      githubUrl: "#",
+      demoUrl: "#",
+      category: "AI/ML"
     }
   ];
 
@@ -208,82 +503,137 @@ const SinglePagePortfolio = () => {
     ? projects
     : projects.filter(project => project.category === activeFilter);
 
+  const whatsappNumber = "+918660144040";
+
+  const handleCareerServiceClick = (serviceTitle: string) => {
+    const message = `Hello, I'm interested in your ${serviceTitle} service. Please let me know how to proceed.`;
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank");
+  };
+
+  const careerServices = [
+    {
+      title: "Resume Design",
+      description: "Professional resume design that highlights your skills and experience.",
+      icon: FileText,
+      buttonText: "Create My Resume",
+      color: "bg-sky-100",
+      hoverColor: "hover:bg-sky-200"
+    },
+    {
+      title: "LinkedIn Optimization",
+      description: "Optimize your LinkedIn profile to attract recruiters and opportunities.",
+      icon: Linkedin,
+      buttonText: "Optimize My Profile",
+      color: "bg-blue-100",
+      hoverColor: "hover:bg-blue-200"
+    },
+    {
+      title: "Interview Coaching",
+      description: "Prepare for technical interviews with mock sessions and feedback.",
+      icon: Mic,
+      buttonText: "Start Coaching",
+      color: "bg-purple-100",
+      hoverColor: "hover:bg-purple-200"
+    },
+    {
+      title: "Portfolio Website",
+      description: "A stunning personal portfolio to showcase your projects and skills.",
+      icon: Code,
+      buttonText: "Build My Portfolio",
+      color: "bg-green-100",
+      hoverColor: "hover:bg-green-200"
+    }
+  ];
+
   return (
     <div ref={containerRef} className="relative">
+      {/* Scroll Progress Bar */}
+      <div className="fixed top-0 left-0 w-full h-1 bg-primary/20 z-50">
+        <motion.div
+          className="h-full bg-gradient-to-r from-primary to-purple-500 origin-left progress-bar"
+          style={{ scaleX: scrollYProgress }}
+        />
+      </div>
+
       <Navbar />
 
       <main>
-        {/* Hero Section with Multi-Layer Parallax */}
-        <section id="home" className="min-h-screen relative overflow-hidden">
-          <MultiLayerParallax>
-            <ParallaxLayer speed={-0.5} className="absolute inset-0 z-0">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-purple-500/20 to-accent/20" />
-            </ParallaxLayer>
-            <ParallaxLayer speed={0} className="relative z-10">
-              <Hero />
-            </ParallaxLayer>
-          </MultiLayerParallax>
-          {/* Scroll Marquee */}
-          <div className="absolute bottom-10 left-0 right-0">
-            <ScrollMarquee 
-              text="FULL-STACK DEVELOPMENT • AI/ML SOLUTIONS • MOBILE APPS • CAREER SERVICES" 
-              speed={0.5}
-              className="py-4 border-t border-primary/20"
-            />
-          </div>
+        {/* Hero Section */}
+        <section id="home" className="min-h-screen">
+          <Hero />
         </section>
 
-        {/* About Section with Color Shift Background */}
-        <ColorShiftBackground className="py-20">
-          <section id="about" className="container mx-auto px-6">
-            {/* Scramble Text Heading */}
-            <div className="text-center mb-16">
-              <SplitTextReveal 
-                text="About Me" 
-                className="text-3xl md:text-4xl font-bold mb-6 gradient-text"
-              />
-            </div>
-
-            {/* Hero About with Tilt Effect */}
-            <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
-              {/* Profile Image */}
-              <ScrollReveal>
-                <TiltCard className="w-80 h-80 mx-auto">
-                  <div className="w-full h-full rounded-3xl overflow-hidden shadow-card relative">
-                    <img
-                      src="/Ritesh.jpg"
-                      alt="Ritesh N"
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute -bottom-6 -right-6 w-24 h-24 rounded-2xl bg-gradient-primary flex items-center justify-center animate-float">
-                      <Code className="w-12 h-12 text-white" />
+        {/* About Section */}
+        <section id="about" className="py-20">
+          <div className="container mx-auto px-6">
+            {/* Hero About */}
+            <motion.div 
+              className="grid lg:grid-cols-5 gap-12 items-center mb-16"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={containerVariants}
+            >
+              {/* Company Image/Logo */}
+              <ScrollReveal className="lg:col-span-2">
+                <motion.div 
+                  className="relative"
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <div className="w-64 h-64 md:w-80 md:h-80 mx-auto rounded-3xl overflow-hidden shadow-card bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center scale-in">
+                    <div className="text-center">
+                      <div className="w-32 h-32 mx-auto mb-6 rounded-2xl bg-white flex items-center justify-center overflow-hidden">
+                        <img
+                          src="/stalightlogo.jpeg"
+                          alt="Stalight Technology Logo"
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                      <h3 className="text-2xl font-bold gradient-text mb-2">Stalight Technology</h3>
+                      <p className="text-muted-foreground">Innovating the Future</p>
                     </div>
                   </div>
-                </TiltCard>
+                  
+                </motion.div>
               </ScrollReveal>
 
               {/* Content */}
-              <ScrollReveal delay={0.3}>
-                <div>
+              <ScrollReveal delay={0.3} className="lg:col-span-3">
+                <motion.div 
+                  className="flex flex-col items-center lg:items-start text-center lg:text-left"
+                  variants={itemVariants}
+                >
                   <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                    Hi, I'm <TextScramble text="Ritesh N" className="gradient-text" delay={500} />
+                    About <span className="gradient-text">Us</span>
                   </h1>
-                  <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-                    Full-Stack Developer | AI Innovator | Startup Founder
+                  <p className="text-xl text-muted-foreground mb-6 leading-relaxed">
+                    Transforming Ideas into Digital Reality
                   </p>
                   <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                    Enthusiastic and driven Full-Stack Developer with a strong foundation in Artificial Intelligence and Machine Learning, currently pursuing a B.E. in CSE (AI & ML) from A.M.C. Engineering College, Bangalore. Founder and CEO of Stalight Technology, a tech startup focused on campus automation and AI-driven applications.
+                    We are a dynamic tech company specializing in cutting-edge web development, mobile applications, and AI/ML solutions. Our passionate team of innovators is dedicated to creating scalable, user-centric digital experiences that drive real-world impact across education, healthcare, and enterprise sectors.
+                  </p>
+                  <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                    Founded with a vision to bridge the gap between technology and human needs, we combine technical expertise with creative problem-solving to deliver exceptional results for our clients worldwide. Explore our company website at <a href="https://stalight.tech" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">stalight.tech</a>.
+                  </p>
+                  <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                    This platform serves as a freelancing hub where we connect talented developers with exciting projects, much like a modern freelancing website, enabling seamless collaboration and innovation.
                   </p>
 
-                  <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                  <motion.div 
+                    className="flex flex-col sm:flex-row gap-4 mb-8"
+                    variants={itemVariants}
+                  >
                     <Button
                       className="btn-gradient hover:shadow-hover transition-smooth"
                       onClick={() => {
-                        const element = document.getElementById('portfolio');
+                        const element = document.getElementById('services');
                         element?.scrollIntoView({ behavior: 'smooth' });
                       }}
                     >
-                      View My Work
+                      Our Services
                     </Button>
                     <Button
                       variant="outline"
@@ -295,410 +645,612 @@ const SinglePagePortfolio = () => {
                     >
                       Get In Touch
                     </Button>
-                  </div>
+                  </motion.div>
 
-                  <div className="flex items-center gap-6">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold gradient-text">10+</div>
-                      <div className="text-sm text-muted-foreground">Projects</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold gradient-text">100%</div>
-                      <div className="text-sm text-muted-foreground">Dedication</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold gradient-text">2+</div>
-                      <div className="text-sm text-muted-foreground">Years Exp</div>
-                    </div>
+                  
+                </motion.div>
+              </ScrollReveal>
+            </motion.div>
+
+            {/* CEO Section */}
+            <div className="mb-10">
+              <ScrollReveal>
+                <motion.div 
+                  className="text-center mb-16"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-50px" }}
+                  variants={fadeInVariants}
+                >
+                  <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                    Meet Our <span className="gradient-text">CEO</span>
+                  </h2>
+                  <div className="max-w-4xl mx-auto">
+                    <motion.div 
+                      className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center"
+                      variants={containerVariants}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, margin: "-100px" }}
+                    >
+                      <motion.div 
+                        className="text-left order-2 md:order-1"
+                        variants={itemVariants}
+                      >
+                        <h3 className="text-2xl font-bold mb-4">Ritesh N</h3>
+                        <p className="text-primary font-medium mb-4">Founder & CEO</p>
+                        <p className="text-muted-foreground mb-6">
+                          Visionary leader with a passion for technology and innovation. With expertise in full-stack development and AI/ML, Ritesh founded Stalight Technology to create meaningful digital solutions that transform businesses and enhance user experiences.
+                        </p>
+                        <motion.div 
+                          variants={itemVariants}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <Button
+                            className="btn-gradient hover:shadow-hover transition-smooth"
+                            onClick={() => window.open('https://riteshn.me', '_blank')}
+                          >
+                            Visit My Portfolio
+                          </Button>
+                        </motion.div>
+                      </motion.div>
+                      <motion.div 
+                        className="flex justify-center order-1 md:order-2"
+                        variants={itemVariants}
+                        whileHover={{ scale: 1.05, rotate: 2 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <div className="w-32 h-32 md:w-48 md:h-48 rounded-2xl overflow-hidden shadow-card float">
+                          <LazyImage
+                            src="/Ritesh.jpg"
+                            alt="Ritesh N - CEO"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      </motion.div>
+                    </motion.div>
                   </div>
-                </div>
+                </motion.div>
               </ScrollReveal>
             </div>
 
-            {/* Trust Badges */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {achievements.map((achievement, index) => (
-                <ScrollReveal key={achievement.title} delay={index * 0.1}>
-                  <TiltCard>
-                    <Card className="p-8 text-center card-gradient border border-white/20 hover:shadow-hover transition-smooth hover:-translate-y-2">
-                      <div className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center mx-auto mb-6">
-                        <achievement.icon className="w-8 h-8 text-white" />
-                      </div>
-                      <h3 className="text-xl font-bold mb-3">{achievement.title}</h3>
-                      <p className="text-muted-foreground">{achievement.description}</p>
-                    </Card>
-                  </TiltCard>
-                </ScrollReveal>
-              ))}
-            </div>
-          </section>
-        </ColorShiftBackground>
-
-        {/* Services Section with Tilt Cards */}
-        <section id="services" className="py-20">
+            {/* Certificates & Achievements */}
+          </div>
+        </section>        {/* Services Section */}
+        <section id="services" className="bg-secondary/30 pt-10">
           <div className="container mx-auto px-6">
             <ScrollReveal>
-              <div className="text-center mb-16">
-                <SplitTextReveal 
-                  text="My Services" 
-                  className="text-3xl md:text-4xl font-bold mb-6 gradient-text"
-                />
+              <motion.div 
+                className="text-center mb-16"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={fadeInVariants}
+              >
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                  <AnimatedText text="Professional " />
+                  <AnimatedText
+                    text="Services"
+                    className="gradient-text inline-block"
+                    delay={0.2}
+                  />
+                </h2>
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                  Comprehensive tech solutions for your business needs
+                  From web development to career services, I provide comprehensive solutions
+                  to help you achieve your goals with quality and expertise.
                 </p>
-              </div>
+              </motion.div>
             </ScrollReveal>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <motion.div 
+              className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+            >
               {services.map((service, index) => (
-                <ScrollReveal key={service.title} delay={index * 0.1}>
-                  <TiltCard>
-                    <ServiceCard
-                      title={service.title}
-                      description={service.description}
-                      price={service.price}
-                      icon={service.icon}
-                      features={service.features}
-                      href={service.href}
-                    />
-                  </TiltCard>
+                <ScrollReveal key={index} delay={index * 0.1} direction="up">
+                  <motion.div
+                    variants={itemVariants}
+                    whileHover={{ 
+                      y: -10, 
+                      scale: 1.05,
+                      boxShadow: "0px 20px 40px rgba(0,0,0,0.15)"
+                    }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className="stagger-item"
+                  >
+                    <ServiceCard {...service} />
+                  </motion.div>
                 </ScrollReveal>
               ))}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Technical Skills Section */}
+        <section id="technical-skills" className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-slate-50 to-gray-50">
+          <div className="container mx-auto px-6">
+            <ScrollReveal>
+              <motion.div 
+                className="text-center mb-8 sm:mb-12 lg:mb-16"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={fadeInVariants}
+              >
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6">
+                  <AnimatedText text="Technical " />
+                  <AnimatedText
+                    text="Skills"
+                    className="gradient-text inline-block"
+                    delay={0.2}
+                  />
+                </h2>
+                <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto">
+                  Comprehensive expertise across modern technologies and frameworks
+                </p>
+              </motion.div>
+            </ScrollReveal>
+
+            {/* Bento Grid Layout */}
+            <div className="max-w-7xl mx-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 auto-rows-[minmax(180px,auto)] sm:auto-rows-[minmax(200px,auto)]">
+                {/* Languages & Frameworks - Large Card */}
+                <ScrollReveal delay={0.1} className="sm:col-span-2 lg:col-span-2">
+                  <motion.div
+                    className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-card hover:shadow-hover transition-smooth h-full"
+                    whileHover={{ y: -5 }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <div className="flex items-center mb-4 sm:mb-6">
+                      <Code className="w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 text-primary mr-3 sm:mr-4" />
+                      <h3 className="text-lg sm:text-xl lg:text-2xl font-bold">Languages & Frameworks</h3>
+                    </div>
+                    <div className="space-y-2 sm:space-y-3 text-muted-foreground">
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">Python</span>
+                        <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">JavaScript</span>
+                        <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">TypeScript</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">HTML5</span>
+                        <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">CSS3</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">Django</span>
+                        <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">Django REST</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">Flask</span>
+                        <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">TensorFlow</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                </ScrollReveal>
+
+                {/* Frontend Technologies */}
+                <ScrollReveal delay={0.2} className="sm:col-span-1 lg:col-span-1">
+                  <motion.div
+                    className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-card hover:shadow-hover transition-smooth h-full"
+                    whileHover={{ y: -5 }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <div className="flex items-center mb-3 sm:mb-4">
+                      <Smartphone className="w-6 h-6 sm:w-8 sm:h-8 text-primary mr-2 sm:mr-3" />
+                      <h3 className="text-base sm:text-lg lg:text-xl font-bold">Frontend</h3>
+                    </div>
+                    <div className="space-y-2 text-muted-foreground">
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">React.js</span>
+                        <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">Redux</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">Tailwind</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                </ScrollReveal>
+
+                {/* Databases & DevOps */}
+                <ScrollReveal delay={0.3} className="sm:col-span-1 lg:col-span-1">
+                  <motion.div
+                    className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-card hover:shadow-hover transition-smooth h-full"
+                    whileHover={{ y: -5 }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <div className="flex items-center mb-3 sm:mb-4">
+                      <Server className="w-6 h-6 sm:w-8 sm:h-8 text-primary mr-2 sm:mr-3" />
+                      <h3 className="text-base sm:text-lg lg:text-xl font-bold">Databases</h3>
+                    </div>
+                    <div className="space-y-2 text-muted-foreground">
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">PostgreSQL</span>
+                        <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">MySQL</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Redis</span>
+                        <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Git</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                </ScrollReveal>
+
+                {/* Tools & Platforms */}
+                <ScrollReveal delay={0.4} className="sm:col-span-1 lg:col-span-1">
+                  <motion.div
+                    className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-card hover:shadow-hover transition-smooth h-full"
+                    whileHover={{ y: -5 }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <div className="flex items-center mb-3 sm:mb-4">
+                      <TabletSmartphone className="w-6 h-6 sm:w-8 sm:h-8 text-primary mr-2 sm:mr-3" />
+                      <h3 className="text-base sm:text-lg lg:text-xl font-bold">Tools</h3>
+                    </div>
+                    <div className="space-y-2 text-muted-foreground">
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">VS Code</span>
+                        <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">GitHub</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">AWS</span>
+                        <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">Android Studio</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                </ScrollReveal>
+
+                {/* Soft Skills */}
+                <ScrollReveal delay={0.5} className="sm:col-span-1 lg:col-span-1">
+                  <motion.div
+                    className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-card hover:shadow-hover transition-smooth h-full"
+                    whileHover={{ y: -5 }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <div className="flex items-center mb-3 sm:mb-4">
+                      <Users className="w-6 h-6 sm:w-8 sm:h-8 text-primary mr-2 sm:mr-3" />
+                      <h3 className="text-base sm:text-lg lg:text-xl font-bold">Soft Skills</h3>
+                    </div>
+                    <div className="space-y-2 text-muted-foreground">
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">Leadership</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">Agile</span>
+                        <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">Mentoring</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                </ScrollReveal>
+
+                {/* Proficiency Level - Large Card */}
+                <ScrollReveal delay={0.6} className="sm:col-span-2 lg:col-span-2">
+                  <motion.div
+                    className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-card hover:shadow-hover transition-smooth h-full"
+                    whileHover={{ y: -5 }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <div className="flex items-center mb-4 sm:mb-6">
+                      <Target className="w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 text-primary mr-3 sm:mr-4" />
+                      <h3 className="text-lg sm:text-xl lg:text-2xl font-bold">Proficiency Level</h3>
+                    </div>
+                    <div className="space-y-3 sm:space-y-4">
+                      <div>
+                        <div className="flex justify-between text-xs sm:text-sm mb-1 sm:mb-2">
+                          <span className="font-medium">Backend Development</span>
+                          <span className="text-primary font-bold">75%</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2 sm:h-3">
+                          <div className="bg-gradient-to-r from-primary to-purple-500 h-2 sm:h-3 rounded-full transition-all duration-1000" style={{ width: '75%' }}></div>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between text-xs sm:text-sm mb-1 sm:mb-2">
+                          <span className="font-medium">Frontend Development</span>
+                          <span className="text-primary font-bold">65%</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2 sm:h-3">
+                          <div className="bg-gradient-to-r from-primary to-purple-500 h-2 sm:h-3 rounded-full transition-all duration-1000" style={{ width: '65%' }}></div>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between text-xs sm:text-sm mb-1 sm:mb-2">
+                          <span className="font-medium">DevOps & Deployment</span>
+                          <span className="text-primary font-bold">60%</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2 sm:h-3">
+                          <div className="bg-gradient-to-r from-primary to-purple-500 h-2 sm:h-3 rounded-full transition-all duration-1000" style={{ width: '60%' }}></div>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between text-xs sm:text-sm mb-1 sm:mb-2">
+                          <span className="font-medium">Software Engineering</span>
+                          <span className="text-primary font-bold">50%</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2 sm:h-3">
+                          <div className="bg-gradient-to-r from-primary to-purple-500 h-2 sm:h-3 rounded-full transition-all duration-1000" style={{ width: '50%' }}></div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                </ScrollReveal>
+              </div>
             </div>
+          </div>
+        </section>
+
+        {/* Join Our Team Section */}
+        <section className="py-20 bg-gradient-to-br from-primary/5 to-secondary/5">
+          <div className="container mx-auto px-6">
+            <ScrollReveal>
+              <motion.div 
+                className="text-center"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={fadeInVariants}
+              >
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                  Join Our <span className="gradient-text">Team</span>
+                </h2>
+                <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+                  Ready to work on exciting client projects? Join our talented team and build amazing solutions together
+                </p>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <Button
+                    size="lg"
+                    className="btn-gradient text-lg px-8 py-6 rounded-2xl hover:shadow-hover transition-smooth"
+                    onClick={() => {
+                      const message = `Hi Ritesh, I'm interested in joining your team to work on client projects. I would like to discuss the opportunities available and how I can contribute to your company's success. Could you please share more details about the current projects, team structure, and the application process? I'm excited about the possibility of working together on innovative solutions.`;
+                      const whatsappUrl = `https://wa.me/918660144040?text=${encodeURIComponent(message)}`;
+                      window.open(whatsappUrl, '_blank');
+                    }}
+                  >
+                    Join Our Team
+                  </Button>
+                </motion.div>
+              </motion.div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* Portfolio Section */}
-        <ColorShiftBackground className="py-20">
-          <section id="portfolio" className="container mx-auto px-6">
-            <ScrollReveal>
-              <div className="text-center mb-16">
-                <SplitTextReveal 
-                  text="My Portfolio" 
-                  className="text-3xl md:text-4xl font-bold mb-6 gradient-text"
-                />
-                <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                  Showcasing my best work and achievements
-                </p>
-              </div>
-            </ScrollReveal>
-
-            {/* Filter Buttons */}
-            <div className="flex flex-wrap justify-center gap-4 mb-12">
-              {["All", "Web Development", "Mobile Apps", "AI/ML", "Career Services"].map((filter) => (
-                <Button
-                  key={filter}
-                  variant={activeFilter === filter ? "default" : "outline"}
-                  className={activeFilter === filter ? "btn-gradient" : ""}
-                  onClick={() => setActiveFilter(filter)}
-                >
-                  {filter}
-                </Button>
-              ))}
-            </div>
-
-            {/* Projects Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredProjects.map((project, index) => (
-                <ScrollReveal key={project.title} delay={index * 0.1}>
-                  <TiltCard>
-                    <ProjectCard {...project} />
-                  </TiltCard>
-                </ScrollReveal>
-              ))}
-            </div>
-          </section>
-        </ColorShiftBackground>
-
-        {/* Pricing Section */}
-        <section id="pricing" className="py-20">
+        <section id="portfolio" className="py-20 color-shift">
           <div className="container mx-auto px-6">
             <ScrollReveal>
-              <div className="text-center mb-16">
-                <SplitTextReveal 
-                  text="Pricing Plans" 
-                  className="text-3xl md:text-4xl font-bold mb-6 gradient-text"
-                />
+              <motion.div 
+                className="text-center mb-16"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={fadeInVariants}
+              >
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                  <AnimatedText text="Featured " />
+                  <AnimatedText
+                    text="Projects"
+                    className="gradient-text inline-block"
+                    delay={0.2}
+                  />
+                </h2>
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                  Choose the perfect package for your needs
+                  Explore my recent work and see how I bring ideas to life through code.
                 </p>
-              </div>
+              </motion.div>
             </ScrollReveal>
 
             <ScrollReveal delay={0.3}>
-              <TiltCard>
-                <PricingTable />
-              </TiltCard>
+              <motion.div 
+                className="flex flex-wrap justify-center gap-4 mb-12"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-50px" }}
+                variants={containerVariants}
+              >
+                {["All", "Web Development", "AI/ML", "Mobile Apps", "Career Services"].map((filter, index) => (
+                  <motion.div
+                    key={filter}
+                    variants={itemVariants}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Button
+                      variant={activeFilter === filter ? "default" : "outline"}
+                      onClick={() => setActiveFilter(filter)}
+                      className="rounded-full"
+                    >
+                      {filter}
+                    </Button>
+                  </motion.div>
+                ))}
+              </motion.div>
             </ScrollReveal>
+
+            <Carousel plugins={[plugin.current]} className="w-full max-w-6xl mx-auto">
+              <CarouselContent className="-ml-4">
+                {filteredProjects.map((project, index) => (
+                  <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                    <div className="p-1">
+                      <motion.div
+                        className="group relative overflow-hidden rounded-2xl bg-card shadow-card hover:shadow-hover transition-smooth h-full"
+                        whileHover={{ y: -10 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <div className="relative h-32 md:h-48 overflow-hidden">
+                          <motion.img
+                            src={project.image}
+                            alt={project.title}
+                            className="w-full h-full object-cover"
+                            initial={{ scale: 1, x: 0, y: 0 }}
+                            whileHover={{
+                              scale: 1.1,
+                              x: index % 2 === 0 ? 10 : -10,
+                              y: index % 3 === 0 ? 10 : -10
+                            }}
+                            transition={{ duration: 0.6 }}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                        
+                        <div className="p-6">
+                          <h3 className="text-xl font-bold mb-2 group-hover:gradient-text transition-all">
+                            {project.title}
+                          </h3>
+                          <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
+                            {project.description}
+                          </p>
+                          <div className="flex flex-wrap gap-2 mb-4">
+                            {project.technologies.slice(0, 3).map((tech, techIndex) => (
+                              <span
+                                key={techIndex}
+                                className="px-2 py-1 text-xs rounded-full bg-primary/10 text-primary"
+                              >
+                                {tech}
+                              </span>
+                            ))}
+                          </div>
+                          <div className="flex gap-2">
+                            <Button 
+                              size="sm" 
+                              className="flex-1"
+                              onClick={() => {
+                                const message = `Hi Ritesh, I'm interested in seeing a live demo of your ${project.title} project. ${project.description.substring(0, 100)}... Could you please arrange a live demonstration? I'd love to see the features and discuss the technical implementation.`;
+                                const whatsappUrl = `https://wa.me/918660144040?text=${encodeURIComponent(message)}`;
+                                window.open(whatsappUrl, '_blank');
+                              }}
+                            >
+                              Request Demo
+                            </Button>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
           </div>
         </section>
 
-        {/* Career Services Section */}
-        <ColorShiftBackground className="py-20">
-          <section id="career" className="container mx-auto px-6">
-            <ScrollReveal>
-              <div className="text-center mb-16">
-                <SplitTextReveal 
-                  text="Career Services" 
-                  className="text-3xl md:text-4xl font-bold mb-6 gradient-text"
-                />
-                <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                  Professional career development and placement assistance
-                </p>
-              </div>
-            </ScrollReveal>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[
-                {
-                  title: "Resume Design",
-                  description: "Professional ATS-friendly resume design",
-                  price: "₹1,500",
-                  features: ["ATS optimization", "Modern design", "Multiple formats", "Unlimited revisions"]
-                },
-                {
-                  title: "LinkedIn Optimization",
-                  description: "Complete LinkedIn profile makeover",
-                  price: "₹2,000",
-                  features: ["Profile optimization", "Content strategy", "Network building", "SEO optimization"]
-                },
-                {
-                  title: "Portfolio Website",
-                  description: "Custom portfolio website development",
-                  price: "₹5,000",
-                  features: ["Responsive design", "SEO optimized", "Contact forms", "Project showcase"]
-                },
-                {
-                  title: "Interview Coaching",
-                  description: "One-on-one interview preparation",
-                  price: "₹3,000",
-                  features: ["Mock interviews", "Technical prep", "Behavioral questions", "Feedback sessions"]
-                }
-              ].map((service, index) => (
-                <ScrollReveal key={service.title} delay={index * 0.1}>
-                  <TiltCard>
-                    <Card className="p-6 h-full bg-gradient-card border border-white/20 hover:shadow-card transition-smooth">
-                      <h3 className="text-xl font-bold mb-2">{service.title}</h3>
-                      <p className="text-muted-foreground mb-4">{service.description}</p>
-                      <div className="text-2xl font-bold gradient-text mb-4">{service.price}</div>
-                      <ul className="space-y-2 text-sm text-muted-foreground mb-6">
-                        {service.features.map((feature, i) => (
-                          <li key={i} className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                            {feature}
-                          </li>
-                        ))}
-                      </ul>
-                      <Button className="w-full btn-gradient">Get Started</Button>
-                    </Card>
-                  </TiltCard>
-                </ScrollReveal>
-              ))}
-            </div>
-          </section>
-        </ColorShiftBackground>
-
-        {/* Contact Section */}
-        <section id="contact" className="py-20">
+        {/* Career Section */}
+        <section id="career" className="py-20 bg-secondary/30">
           <div className="container mx-auto px-6">
             <ScrollReveal>
-              <div className="text-center mb-16">
-                <SplitTextReveal 
-                  text="Get In Touch" 
-                  className="text-3xl md:text-4xl font-bold mb-6 gradient-text"
-                />
+              <motion.div 
+                className="text-center mb-16"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={fadeInVariants}
+              >
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                  <AnimatedText text="Career " />
+                  <AnimatedText
+                    text="Services"
+                    className="gradient-text inline-block"
+                    delay={0.2}
+                  />
+                </h2>
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                  Let's discuss your project and bring your ideas to life
+                  Professional career development services to help you stand out in the competitive job market.
                 </p>
-              </div>
+              </motion.div>
             </ScrollReveal>
 
-            <div className="grid lg:grid-cols-2 gap-12">
-              {/* Contact Info */}
-              <ScrollReveal>
-                <div className="space-y-8">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-primary flex items-center justify-center">
-                      <Mail className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold">Email</h3>
-                      <p className="text-muted-foreground">riteshnaidu@growvo.com</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-primary flex items-center justify-center">
-                      <Phone className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold">Phone</h3>
-                      <p className="text-muted-foreground">+91 9876543210</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-primary flex items-center justify-center">
-                      <MapPin className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold">Location</h3>
-                      <p className="text-muted-foreground">Bangalore, India</p>
-                    </div>
-                  </div>
-
-                  {/* Social Links */}
-                  <div className="flex gap-4 pt-6">
-                    <a href="#" className="w-12 h-12 rounded-2xl bg-gradient-primary flex items-center justify-center hover:shadow-hover transition-smooth">
-                      <Github className="w-6 h-6 text-white" />
-                    </a>
-                    <a href="#" className="w-12 h-12 rounded-2xl bg-gradient-primary flex items-center justify-center hover:shadow-hover transition-smooth">
-                      <Linkedin className="w-6 h-6 text-white" />
-                    </a>
-                    <a href="#" className="w-12 h-12 rounded-2xl bg-gradient-primary flex items-center justify-center hover:shadow-hover transition-smooth">
-                      <Twitter className="w-6 h-6 text-white" />
-                    </a>
-                  </div>
-
-                  {/* WhatsApp Button */}
-                  <Button 
-                    className="btn-gradient text-lg px-8 py-6 rounded-2xl hover:shadow-hover transition-smooth w-full"
-                    onClick={() => window.open('https://wa.me/9876543210', '_blank')}
+            <motion.div 
+              className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+            >
+              {careerServices.map((service, index) => (
+                <ScrollReveal key={index} delay={index * 0.2} direction="up">
+                  <motion.div
+                    variants={itemVariants}
+                    whileHover={{ 
+                      y: -10, 
+                      scale: 1.05,
+                      boxShadow: "0px 20px 40px rgba(0,0,0,0.15)"
+                    }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className="stagger-item"
                   >
-                    Chat on WhatsApp
-                  </Button>
-                </div>
-              </ScrollReveal>
-
-              {/* Contact Form */}
-              <ScrollReveal delay={0.3}>
-                <TiltCard>
-                  <Card className="p-8 bg-gradient-card border border-white/20">
-                    <form className="space-y-6">
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div>
-                          <label className="block text-sm font-medium mb-2">Name</label>
-                          <input 
-                            type="text" 
-                            className="w-full p-3 rounded-xl bg-background/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-primary/50"
-                            placeholder="Your name"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium mb-2">Email</label>
-                          <input 
-                            type="email" 
-                            className="w-full p-3 rounded-xl bg-background/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-primary/50"
-                            placeholder="your@email.com"
-                          />
-                        </div>
+                    <motion.div
+                      className={`p-8 rounded-2xl shadow-card transition-smooth group flex flex-col h-full ${service.color} ${service.hoverColor}`}
+                      whileHover={{ y: -10, scale: 1.05, boxShadow: "0px 20px 40px rgba(0,0,0,0.2)" }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
+                      <div className="flex-grow">
+                        <service.icon className="w-12 h-12 text-primary mb-4" />
+                        <h3 className="text-xl font-bold mb-4">{service.title}</h3>
+                        <p className="text-muted-foreground">{service.description}</p>
                       </div>
-                      
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div>
-                          <label className="block text-sm font-medium mb-2">Service</label>
-                          <select className="w-full p-3 rounded-xl bg-background/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-primary/50">
-                            <option>Web Development</option>
-                            <option>Mobile Apps</option>
-                            <option>AI/ML Solutions</option>
-                            <option>Career Services</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium mb-2">Budget</label>
-                          <select className="w-full p-3 rounded-xl bg-background/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-primary/50">
-                            <option>₹5,000 - ₹15,000</option>
-                            <option>₹15,000 - ₹50,000</option>
-                            <option>₹50,000+</option>
-                          </select>
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Message</label>
-                        <textarea 
-                          rows={4} 
-                          className="w-full p-3 rounded-xl bg-background/50 border border-border/50 focus:outline-none focus:ring-2 focus:ring-primary/50"
-                          placeholder="Tell me about your project..."
-                        />
-                      </div>
-
-                      <Button className="w-full btn-gradient text-lg py-3 rounded-xl hover:shadow-hover transition-smooth">
-                        Send Message
-                      </Button>
-                    </form>
-                  </Card>
-                </TiltCard>
-              </ScrollReveal>
-            </div>
+                      <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <Button 
+                          className="mt-6 w-full transition-smooth btn-gradient hover:shadow-hover"
+                          onClick={() => handleCareerServiceClick(service.title)}
+                        >
+                          {service.buttonText}
+                        </Button>
+                      </motion.div>
+                    </motion.div>
+                  </motion.div>
+                </ScrollReveal>
+              ))}
+            </motion.div>
           </div>
         </section>
 
-        {/* Testimonials */}
-        <ColorShiftBackground className="py-20">
-          <section className="container mx-auto px-6">
+        {/* Pricing Section */}
+        <section id="pricing" className="py-20 bg-secondary/30">
+          <div className="container mx-auto px-6">
             <ScrollReveal>
-              <div className="text-center mb-16">
-                <SplitTextReveal 
-                  text="Client Testimonials" 
-                  className="text-3xl md:text-4xl font-bold mb-6 gradient-text"
-                />
+              <motion.div 
+                className="text-center mb-16"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={fadeInVariants}
+              >
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                  <AnimatedText text="Tailored " />
+                  <AnimatedText
+                    text="Packages"
+                    className="gradient-text inline-block"
+                    delay={0.2}
+                  />
+                </h2>
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                  What my clients say about working with me
+                  Pricing Plans
                 </p>
-              </div>
+              </motion.div>
             </ScrollReveal>
+            <PricingTable />
+          </div>
+        </section>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[
-                {
-                  name: "Sarah Johnson",
-                  role: "CEO, TechStart",
-                  content: "Ritesh delivered an exceptional e-commerce platform that exceeded our expectations. Professional, timely, and innovative.",
-                  rating: 5
-                },
-                {
-                  name: "Mike Chen", 
-                  role: "Founder, DataFlow",
-                  content: "The AI solution Ritesh built for us increased our efficiency by 40%. Highly recommend his expertise.",
-                  rating: 5
-                },
-                {
-                  name: "Emma Davis",
-                  role: "Marketing Director",
-                  content: "Outstanding career services! Ritesh helped me land my dream job with a perfect resume and LinkedIn optimization.",
-                  rating: 5
-                }
-              ].map((testimonial, index) => (
-                <ScrollReveal key={testimonial.name} delay={index * 0.1}>
-                  <TiltCard>
-                    <Card className="p-8 card-gradient border border-white/20 hover:shadow-hover transition-smooth">
-                      <div className="flex mb-4">
-                        {[...Array(testimonial.rating)].map((_, i) => (
-                          <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                        ))}
-                      </div>
-                      <p className="text-muted-foreground mb-6 italic">"{testimonial.content}"</p>
-                      <div>
-                        <div className="font-bold">{testimonial.name}</div>
-                        <div className="text-sm text-muted-foreground">{testimonial.role}</div>
-                      </div>
-                    </Card>
-                  </TiltCard>
-                </ScrollReveal>
-              ))}
-            </div>
-          </section>
-        </ColorShiftBackground>
+        {/* Contact Section */}
+        <NewContactSection />
 
-        {/* Footer Marquee */}
-        <div className="py-8 border-t border-primary/20">
-          <ScrollMarquee 
-            text="GROWVO • FULL-STACK DEVELOPMENT • AI/ML SOLUTIONS • MOBILE APPS • CAREER SERVICES • CONTACT US TODAY" 
-            speed={0.3}
-            direction="left"
-          />
-        </div>
+        <Footer />
       </main>
     </div>
   );

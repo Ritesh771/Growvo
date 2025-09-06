@@ -28,7 +28,7 @@ const ProjectCard = ({
         <img 
           src={image} 
           alt={title}
-          className="w-full h-48 object-cover transition-smooth group-hover:scale-105"
+          className="w-full h-32 md:h-48 object-cover transition-smooth group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-10 transition-smooth" />
         

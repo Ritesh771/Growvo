@@ -83,36 +83,19 @@ const Hero = () => {
               }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <motion.div
-                animate={{ rotate: [0, 360] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-              >
-                <Sparkles className="w-4 h-4 text-primary" />
-              </motion.div>
-              <span className="text-sm font-medium">Professional Freelance Solutions</span>
+              
+              
             </motion.div>
           </ScrollReveal>
 
           {/* Main headline with text reveal animation */}
-                            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-                    <AnimatedText text="Affordable " />
-                    <AnimatedText 
-                      text="Web, App, AI " 
-                      className="gradient-text inline-block"
-                      delay={0.3}
-                    />
-                    <AnimatedText text="& " delay={0.6} />
-                    <AnimatedText 
-                      text="Career " 
-                      className="gradient-text inline-block"
-                      delay={0.7}
-                    />
-                    <AnimatedText text="Solutions" delay={1} />
-                  </h1>
+                            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500 font-['Montserrat']">
+  Smart & Affordable Solutions for Web, Apps, AI, and Careers
+</h1>
 
           {/* Subheading */}
           <ScrollReveal delay={0.8}>
-                              <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
+                              <p className="text-lg md:text-xl lg:text-2xl text-gray-200 mb-12 max-w-3xl mx-auto leading-relaxed">
                     Choose from small, medium, and large project packages or request a custom solution. 
                     Professional development and career services tailored to your needs.
                   </p>
@@ -127,7 +110,7 @@ const Hero = () => {
               >
                 <Button 
                   size="lg" 
-                  className="btn-gradient text-lg px-8 py-6 rounded-2xl hover:shadow-hover transition-smooth group"
+                  className="btn-gradient text-base md:text-lg px-6 md:px-8 py-4 md:py-6 rounded-2xl hover:shadow-hover transition-smooth group"
                   onClick={() => {
                     const element = document.getElementById('services');
                     element?.scrollIntoView({ behavior: 'smooth' });
@@ -150,7 +133,7 @@ const Hero = () => {
                 <Button 
                   size="lg" 
                   variant="outline"
-                  className="text-lg px-8 py-6 rounded-2xl border-2 border-primary/30 hover:border-primary hover:bg-primary/5 transition-smooth"
+                  className="text-base md:text-lg px-6 md:px-8 py-4 md:py-6 rounded-2xl border-2 border-primary/30 hover:border-primary hover:bg-primary/5 transition-smooth"
                   onClick={() => {
                     const element = document.getElementById('contact');
                     element?.scrollIntoView({ behavior: 'smooth' });
@@ -191,7 +174,7 @@ const Hero = () => {
                   >
                     {stat.value}
                   </motion.div>
-                  <div className="text-sm text-muted-foreground">{stat.label}</div>
+                  <div className="text-sm text-gray-200">{stat.label}</div>
                 </motion.div>
               ))}
             </div>

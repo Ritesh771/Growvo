@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Kaoly:wght@400;700;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -276,4 +278,97 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, hsl(var(--primary-dark)), hsl(var(--purple-dark)));
+}
+
+/* Pinned Scroll Animation Styles */
+.sticky-card-container {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+  margin-top: 0;
+  z-index: 10;
+}
+
+.card-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 28rem;
+  margin: 0 auto;
+  perspective: 1000px;
+  min-height: 480px;
+  height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.card-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 28rem;
+  opacity: 0;
+  scale: 0.95;
+  transition: opacity 0.4s ease, transform 0.4s ease, scale 0.4s ease;
+  will-change: opacity, transform, scale, z-index;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  margin: 0 auto;
+  padding: 2rem;
+  box-sizing: border-box;
+  min-height: 400px;
+}
+
+/* Ensure smooth animations */
+.card-item:first-child {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  z-index: 10;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sticky-card-container {
+    padding: 3rem 0;
+    margin-top: -1rem;
+  }
+  .card-wrapper {
+    max-width: 28rem;
+    min-height: 450px;
+    padding: 1.5rem 0;
+  }
+  .card-item {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sticky-card-container {
+    padding: 2rem 0;
+  }
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .card-wrapper {
+    max-width: 24rem;
+    min-height: 420px;
+    height: 420px;
+    padding: 0.5rem;
+  }
+
+  .card-item {
+    max-width: 24rem;
+    min-height: 350px;
+    padding: 1rem;
+  }
 }

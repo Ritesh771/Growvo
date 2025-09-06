@@ -1,19 +1,28 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Check, Star } from "lucide-react";
+import { motion } from "framer-motion";
 
 const PricingTable = () => {
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId.replace('#', ''));
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+  const whatsappNumber = "+918660144040";
+
+  const handleGetStarted = (planName: string, price: string) => {
+    const message = `Hello, I am writing to express my interest in your services. I would like to get started with the ${planName} plan, priced at ${price}. I have reviewed the features and believe it is a good fit for my project. Please let me know the next steps to proceed. Thank you.`;
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank");
   };
+
+  const handleCustomQuote = () => {
+    const message = "Hello, I am writing to request a custom quote for my project. I have a unique set of requirements that do not seem to fit into your existing plans. I would appreciate it if we could discuss the project details and get a custom quote. Please let me know your availability for a brief call. Thank you.";
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank");
+  };
+
   const plans = [
     {
       name: "Small",
       subtitle: "Perfect for startups",
-      price: "₹15,000",
+      price: "₹10,000",
       duration: "2-3 weeks",
       popular: false,
       features: [
@@ -29,7 +38,7 @@ const PricingTable = () => {
     {
       name: "Medium",
       subtitle: "Most popular choice",
-      price: "₹35,000",
+      price: "₹27,000",
       duration: "4-6 weeks",
       popular: true,
       features: [
@@ -46,7 +55,7 @@ const PricingTable = () => {
     {
       name: "Large",
       subtitle: "Enterprise solution",
-      price: "₹75,000",
+      price: "₹35,000",
       duration: "8-12 weeks",
       popular: false,
       features: [
@@ -64,54 +73,47 @@ const PricingTable = () => {
   ];
 
   return (
-    <section className="py-20">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Choose Your <span className="gradient-text">Perfect Package</span>
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Transparent pricing with no hidden costs. All packages include quality code, documentation, and ongoing support.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {plans.map((plan, index) => (
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+        {plans.map((plan, index) => (
+          <motion.div
+            key={plan.name}
+            whileHover={{ scale: 1.05, rotateY: 10, boxShadow: "0px 10px 30px rgba(0,0,0,0.2)" }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
             <Card 
-              key={plan.name}
-              className={`relative overflow-hidden transition-smooth hover:shadow-hover hover:-translate-y-2 ${
+              className={`relative overflow-hidden transition-smooth h-full min-h-[500px] md:min-h-[550px] ${
                 plan.popular 
-                  ? 'border-2 border-primary shadow-card scale-105' 
+                  ? 'border-2 border-primary shadow-card' 
                   : 'border border-white/20 card-gradient'
               }`}
             >
               {/* Popular badge */}
               {plan.popular && (
-                <div className="absolute top-0 left-0 right-0 bg-gradient-primary text-white text-center py-3 font-medium">
+                <div className="absolute top-0 left-0 right-0 bg-gradient-primary text-white text-center py-2 md:py-3 font-medium z-10">
                   <div className="flex items-center justify-center gap-2">
-                    <Star className="w-4 h-4" />
-                    Most Popular
+                    <Star className="w-3 h-3 md:w-4 md:h-4" />
+                    <span className="text-sm md:text-base">Most Popular</span>
                   </div>
                 </div>
               )}
 
-              <div className={`p-8 ${plan.popular ? 'pt-20' : ''}`}>
-                {/* Header */}
-                <div className="text-center mb-8">
-                  <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-                  <p className="text-muted-foreground mb-6">{plan.subtitle}</p>
+              <div className={`p-4 md:p-8 ${plan.popular ? 'pt-16 md:pt-20' : ''}`}>
+                <div className="text-center mb-6 md:mb-8">
+                  <h3 className="text-xl md:text-2xl font-bold mb-2">{plan.name}</h3>
+                  <p className="text-muted-foreground mb-4 md:mb-6">{plan.subtitle}</p>
                   
                   <div className="mb-4">
-                    <span className="text-4xl font-bold gradient-text">{plan.price}</span>
+                    <span className="text-3xl md:text-4xl font-bold gradient-text">{plan.price}</span>
                   </div>
                   
-                  <div className="text-sm text-muted-foreground mb-6">
+                  <div className="text-sm text-muted-foreground mb-4 md:mb-6">
                     Delivery: {plan.duration}
                   </div>
                 </div>
 
                 {/* Features */}
-                <ul className="space-y-4 mb-8">
+                <ul className="space-y-3 md:space-y-4 mb-6 md:mb-8">
                   {plan.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-start gap-3">
                       <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center mt-0.5 flex-shrink-0">
@@ -130,31 +132,31 @@ const PricingTable = () => {
                       : 'border-2 border-primary/30 hover:border-primary hover:bg-primary/5'
                   }`}
                   variant={plan.popular ? "default" : "outline"}
-                  onClick={() => scrollToSection('#contact')}
+                  onClick={() => handleGetStarted(plan.name, plan.price)}
                 >
                   Get Started
                 </Button>
               </div>
             </Card>
-          ))}
-        </div>
-
-        {/* Custom solution CTA */}
-        <div className="text-center mt-16">
-          <p className="text-lg text-muted-foreground mb-6">
-            Need something custom? Let's discuss your unique requirements.
-          </p>
-          <Button 
-            variant="outline"
-            size="lg"
-            className="border-2 border-primary/30 hover:border-primary hover:bg-primary/5 transition-smooth"
-            onClick={() => scrollToSection('#contact')}
-          >
-            Request Custom Quote
-          </Button>
-        </div>
+          </motion.div>
+        ))}
       </div>
-    </section>
+
+      {/* Custom solution CTA */}
+      <div className="text-center mt-16">
+        <p className="text-lg text-muted-foreground mb-6">
+          Need something custom? Let's discuss your unique requirements.
+        </p>
+        <Button 
+          variant="outline"
+          size="lg"
+          className="border-2 border-primary/30 hover:border-primary hover:bg-primary/5 transition-smooth"
+          onClick={handleCustomQuote}
+        >
+          Request Custom Quote
+        </Button>
+      </div>
+    </>
   );
 };
 

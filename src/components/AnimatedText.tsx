@@ -43,7 +43,7 @@ export const AnimatedText = ({ text, className = "", delay = 0 }: AnimatedTextPr
   };
 
   return (
-    <motion.div
+    <motion.span
       ref={ref}
       className={className}
       variants={container}
@@ -55,6 +55,6 @@ export const AnimatedText = ({ text, className = "", delay = 0 }: AnimatedTextPr
           {letter === " " ? "\u00A0" : letter}
         </motion.span>
       ))}
-    </motion.div>
+    </motion.span>
   );
 };

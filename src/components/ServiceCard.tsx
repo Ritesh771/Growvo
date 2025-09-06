@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, LucideIcon } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface ServiceCardProps {
   title: string;
@@ -9,9 +10,11 @@ interface ServiceCardProps {
   icon: LucideIcon;
   features: string[];
   href: string;
+  color: string; // Added color prop
+  hoverColor: string; // Added hoverColor prop
 }
 
-const ServiceCard = ({ title, description, price, icon: Icon, features, href }: ServiceCardProps) => {
+const ServiceCard = ({ title, description, price, icon: Icon, features, href, color, hoverColor }: ServiceCardProps) => {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId.replace('#', ''));
     if (element) {
@@ -19,16 +22,40 @@ const ServiceCard = ({ title, description, price, icon: Icon, features, href }: 
     }
   };
 
+  const handleClick = (href: string) => {
+    if (href.startsWith('https://')) {
+      // External link (WhatsApp)
+      window.open(href, '_blank');
+    } else {
+      // Internal section link
+      scrollToSection(href);
+    }
+  };
+
   return (
-    <Card className="relative overflow-hidden group hover:shadow-hover transition-smooth hover:-translate-y-2 card-gradient border border-white/20">
+    <motion.div
+      className={`relative overflow-hidden group shadow-card transition-smooth ${color} ${hoverColor}`}
+      whileHover={{
+        scale: 1.05,
+        rotateY: 5,
+        rotateX: 5,
+        boxShadow: "0px 10px 30px rgba(0,0,0,0.2)"
+      }}
+      transition={{ type: "spring", stiffness: 300 }}
+      style={{ pointerEvents: 'auto' }}
+    >
       {/* Glow effect */}
-      <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-5 transition-smooth" />
+      <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-5 transition-smooth pointer-events-none" />
       
-      <div className="p-8">
+      <div className="p-4 md:p-8">
         {/* Icon */}
-        <div className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-smooth">
+        <motion.div
+          className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center mb-6"
+          whileHover={{ scale: 1.1, rotate: 10 }}
+          transition={{ type: "spring", stiffness: 400 }}
+        >
           <Icon className="w-8 h-8 text-white" />
-        </div>
+        </motion.div>
 
         {/* Content */}
         <h3 className="text-2xl font-bold mb-3">{title}</h3>
@@ -54,14 +81,14 @@ const ServiceCard = ({ title, description, price, icon: Icon, features, href }: 
 
         {/* CTA */}
         <Button 
-          className="w-full btn-gradient hover:shadow-hover transition-smooth group"
-          onClick={() => scrollToSection(href)}
+          className="w-full btn-gradient hover:shadow-hover transition-smooth group cursor-pointer"
+          onClick={() => handleClick(href)}
         >
           Get Started
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform ml-2" />
         </Button>
       </div>
-    </Card>
+    </motion.div>
   );
 };
 

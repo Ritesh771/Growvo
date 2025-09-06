@@ -1,20 +1,19 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import SinglePagePortfolio from "./pages/SinglePagePortfolio";
-import NotFound from "./pages/NotFound";
-import ScrollProgressBar from "./components/ScrollProgressBar";
 
-function App() {
-  return (
-    <Router>
-      <ScrollProgressBar />
-      <Routes>
-        <Route path="/" element={<SinglePagePortfolio />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+const queryClient = new QueryClient();
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
       <Toaster />
-    </Router>
-  );
-}
+      <Sonner />
+      <SinglePagePortfolio />
+    </TooltipProvider>
+  </QueryClientProvider>
+);
 
 export default App;

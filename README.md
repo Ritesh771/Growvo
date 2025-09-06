@@ -1,73 +1,153 @@
-# Welcome to your Lovable project
+# 🚀 Growvo - Affordable Web, App, AI & Career Solutions
 
-## Project info
+<div align="center">
+  <img src="public/stalightlogo.jpeg" alt="Growvo Logo" width="120" height="120" style="border-radius: 50%; border: 3px solid #6366f1;" />
 
-**URL**: https://lovable.dev/projects/73e9a871-24e6-4982-8d72-bf101e21b33a
+  <h2>Professional Freelance Services</h2>
+  <p><em>Transforming Ideas into Digital Reality</em></p>
 
-## How can I edit this code?
+  ![Website](https://img.shields.io/badge/Website-Live-brightgreen?style=for-the-badge&logo=google-chrome)
+  ![React](https://img.shields.io/badge/React-18.3.1-blue?style=flat-square&logo=react)
+  ![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue?style=flat-square&logo=typescript)
+  ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.17-38B2AC?style=flat-square&logo=tailwind-css)
+</div>
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## ✨ What We Offer
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/73e9a871-24e6-4982-8d72-bf101e21b33a) and start prompting.
+### 🌐 **Web Development**
+- **Modern React Applications** - Built with latest technologies
+- **Responsive Design** - Perfect on all devices
+- **Performance Optimized** - Fast loading, SEO friendly
+- **Custom Solutions** - Tailored to your specific needs
 
-Changes made via Lovable will be committed automatically to this repo.
+### 📱 **Mobile App Development**
+- **Cross-Platform Apps** - iOS & Android compatibility
+- **Native Performance** - Smooth user experiences
+- **Intuitive UI/UX** - User-centered design approach
+- **App Store Ready** - Complete deployment support
 
-**Use your preferred IDE**
+### 🤖 **AI & Machine Learning**
+- **Intelligent Solutions** - Smart automation systems
+- **Data Analytics** - Insights-driven decision making
+- **Custom AI Models** - Specialized for your business
+- **Integration Services** - Seamlessly connect with existing systems
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 💼 **Career Services**
+- **Resume Writing** - Professional, ATS-optimized resumes
+- **Career Counseling** - Personalized guidance
+- **Interview Preparation** - Mock interviews and coaching
+- **Job Search Strategy** - Comprehensive placement support
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## 🎯 Our Approach
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <h3>🎨 Design</h3>
+        <p>Beautiful, modern interfaces that engage users</p>
+      </td>
+      <td align="center">
+        <h3>⚡ Performance</h3>
+        <p>Lightning-fast applications with optimal UX</p>
+      </td>
+      <td align="center">
+        <h3>🔒 Security</h3>
+        <p>Enterprise-grade security and data protection</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        <h3>📊 Analytics</h3>
+        <p>Data-driven insights and performance tracking</p>
+      </td>
+      <td align="center">
+        <h3>🔧 Maintenance</h3>
+        <p>Ongoing support and feature enhancements</p>
+      </td>
+      <td align="center">
+        <h3>💡 Innovation</h3>
+        <p>Cutting-edge technologies and creative solutions</p>
+      </td>
+    </tr>
+  </table>
+</div>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+---
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 📋 Service Packages
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+### 🚀 **Small Package** - $299
+- Basic website (5 pages)
+- Mobile responsive design
+- Contact form integration
+- 1 month support
 
-**Edit a file directly in GitHub**
+### ⚡ **Medium Package** - $799
+- Advanced website (15 pages)
+- Custom functionality
+- Database integration
+- 3 months support
+- SEO optimization
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### 💎 **Large Package** - $1,999
+- Full-scale application
+- Advanced features
+- Third-party integrations
+- 6 months support
+- Performance monitoring
 
-**Use GitHub Codespaces**
+---
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 🛠️ Technologies We Use
 
-## What technologies are used for this project?
+<div align="center">
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue" alt="Python" />
+  <img src="https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=green" alt="Django" />
+  <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
+  <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+</div>
 
-This project is built with:
+---
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 📞 Get In Touch
 
-## How can I deploy this project?
+<div align="center">
+  <h3>Ready to bring your ideas to life?</h3>
+  <p>Contact us today for a free consultation</p>
 
-Simply open [Lovable](https://lovable.dev/projects/73e9a871-24e6-4982-8d72-bf101e21b33a) and click on Share -> Publish.
+  <a href="mailto:contact@growvo.com">
+    <img src="https://img.shields.io/badge/Email-contact%40growvo.com-blue?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" />
+  </a>
+  <a href="https://growvo.com">
+    <img src="https://img.shields.io/badge/Website-growvo.com-green?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Website" />
+  </a>
+</div>
 
-## Can I connect a custom domain to my Lovable project?
+---
 
-Yes, you can!
+## 🌟 Why Choose Growvo?
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- ✅ **Affordable Pricing** - Quality solutions at competitive rates
+- ✅ **Fast Turnaround** - Quick delivery without compromising quality
+- ✅ **Expert Team** - Experienced developers and designers
+- ✅ **100% Satisfaction** - Money-back guarantee
+- ✅ **Ongoing Support** - Continuous maintenance and updates
+- ✅ **Modern Technologies** - Latest tools and frameworks
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+---
+
+<div align="center">
+  <h3>🚀 Let's Build Something Amazing Together!</h3>
+  <p>Visit <a href="https://growvo.com">growvo.com</a> to explore our portfolio and start your project today.</p>
+
+  <img src="https://img.shields.io/badge/Made_with_❤️_by_Growvo-FF6B6B?style=for-the-badge" alt="Made with love" />
+</div>
