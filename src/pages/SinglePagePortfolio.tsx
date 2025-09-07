@@ -815,18 +815,28 @@ const SinglePagePortfolio = () => {
                         <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">Python</span>
                         <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">JavaScript</span>
                         <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">TypeScript</span>
+                        <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">Java</span>
                       </div>
                       <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">HTML5</span>
                         <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">CSS3</span>
+                        <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">SASS/SCSS</span>
                       </div>
                       <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">Django</span>
                         <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">Django REST</span>
+                        <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">FastAPI</span>
                       </div>
                       <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">Flask</span>
                         <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">TensorFlow</span>
+                        <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">PyTorch</span>
+                        <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">Node.js</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">Express.js</span>
+                        <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">Next.js</span>
+                        <span className="px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">Vue.js</span>
                       </div>
                     </div>
                   </motion.div>
@@ -848,9 +858,20 @@ const SinglePagePortfolio = () => {
                       <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">React.js</span>
                         <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">Redux</span>
+                        <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">Zustand</span>
                       </div>
                       <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">Tailwind</span>
+                        <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">Material-UI</span>
+                        <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">Bootstrap</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">Framer Motion</span>
+                        <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">Three.js</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">Vite</span>
+                        <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">Webpack</span>
                       </div>
                     </div>
                   </motion.div>
@@ -872,10 +893,20 @@ const SinglePagePortfolio = () => {
                       <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">PostgreSQL</span>
                         <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">MySQL</span>
+                        <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">MongoDB</span>
                       </div>
                       <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Redis</span>
+                        <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">SQLite</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Git</span>
+                        <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Docker</span>
+                        <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Kubernetes</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Jenkins</span>
+                        <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">GitLab CI</span>
                       </div>
                     </div>
                   </motion.div>
@@ -897,10 +928,20 @@ const SinglePagePortfolio = () => {
                       <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">VS Code</span>
                         <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">GitHub</span>
+                        <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">GitLab</span>
                       </div>
                       <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">AWS</span>
                         <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">Android Studio</span>
+                        <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">Postman</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">Figma</span>
+                        <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">Adobe XD</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">Jira</span>
+                        <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">Slack</span>
                       </div>
                     </div>
                   </motion.div>
@@ -921,10 +962,20 @@ const SinglePagePortfolio = () => {
                     <div className="space-y-2 text-muted-foreground">
                       <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">Leadership</span>
+                        <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">Communication</span>
                       </div>
                       <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">Agile</span>
                         <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">Mentoring</span>
+                        <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">Problem Solving</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">Team Collaboration</span>
+                        <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">Time Management</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">Adaptability</span>
+                        <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">Creativity</span>
                       </div>
                     </div>
                   </motion.div>
