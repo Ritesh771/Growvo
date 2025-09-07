@@ -12,9 +12,10 @@ interface ServiceCardProps {
   href: string;
   color: string; // Added color prop
   hoverColor: string; // Added hoverColor prop
+  onClick?: (href: string) => void; // Optional custom click handler
 }
 
-const ServiceCard = ({ title, description, price, icon: Icon, features, href, color, hoverColor }: ServiceCardProps) => {
+const ServiceCard = ({ title, description, price, icon: Icon, features, href, color, hoverColor, onClick }: ServiceCardProps) => {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId.replace('#', ''));
     if (element) {
@@ -23,6 +24,11 @@ const ServiceCard = ({ title, description, price, icon: Icon, features, href, co
   };
 
   const handleClick = (href: string) => {
+    if (onClick) {
+      onClick(href);
+      return;
+    }
+
     if (href.startsWith('https://')) {
       // External link (WhatsApp)
       window.open(href, '_blank');

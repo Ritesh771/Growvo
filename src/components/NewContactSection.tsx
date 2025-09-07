@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AnimatedText } from "@/components/AnimatedText";
 import { Github, Linkedin, Mail, Send } from 'lucide-react';
+import WhatsAppPopup from "@/components/WhatsAppPopup";
 
 // WhatsApp SVG Icon
 const WhatsAppIcon = (props) => (
@@ -11,8 +12,78 @@ const WhatsAppIcon = (props) => (
 );
 
 const NewContactSection = () => {
+  const [whatsappPopup, setWhatsappPopup] = useState({
+    isOpen: false,
+    message: "",
+    title: "",
+    description: "",
+    formType: "basic" as "basic" | "joinTeam",
+  });
+
+  const handleCardClick = (href: string, e: React.MouseEvent) => {
+    if (href.includes('wa.me')) {
+      e.preventDefault();
+      // Extract message from URL
+      const url = new URL(href);
+      const text = url.searchParams.get('text') || '';
+      setWhatsappPopup({
+        isOpen: true,
+        message: decodeURIComponent(text),
+        title: "Contact via WhatsApp",
+        description: "Please provide your details so we can start the conversation.",
+        formType: "basic",
+      });
+    }
+  };
+
+  const handleWhatsappSubmit = (userData: { name: string; email: string }) => {
+    const fullMessage = `Hello! My name is ${userData.name} and my email is ${userData.email}.\n\n${whatsappPopup.message}`;
+    const whatsappUrl = `https://wa.me/918660144040?text=${encodeURIComponent(fullMessage)}`;
+    window.open(whatsappUrl, "_blank");
+  };
+
+  /* Reusable Card Components */
+  const Card = ({ children, href }) => (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={(e) => handleCardClick(href, e)}
+      className="group rounded-2xl p-6 bg-card/50 backdrop-blur-sm border border-border/50 shadow-lg hover:shadow-2xl transform hover:scale-[1.05] transition-all duration-500 cursor-pointer block hover:-translate-y-2 relative overflow-hidden"
+    >
+      {children}
+    </a>
+  );
+
+  const IconBox = ({ children, color }) => (
+    <div className={`w-12 h-12 ${color} rounded-xl flex items-center justify-center mb-4 shadow-lg hover:scale-110 transition-all duration-300 group-hover:rotate-3 group-hover:shadow-xl`}>
+      {children}
+    </div>
+  );
+
+  const CardTitle = ({ children }) => (
+    <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
+      {children}
+    </h3>
+  );
+
+  const CardDesc = ({ children }) => (
+    <p className="text-muted-foreground mb-4 text-sm group-hover:text-foreground/80 transition-colors duration-300">
+      {children}
+    </p>
+  );
+
+  const CardButton = ({ children }) => (
+    <div
+      className="inline-flex items-center px-4 py-2 rounded-xl text-primary-foreground font-medium transition-all duration-300 bg-gradient-primary cursor-pointer shadow-md hover:shadow-lg transform group-hover:scale-105 group-hover:-translate-y-1"
+    >
+      <span className="mr-2">{children}</span>
+      <Send className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+    </div>
+  );
+
   return (
-  <section id="contact" className="py-12 sm:py-16 lg:py-20 bg-background relative overflow-hidden">
+    <section id="contact" className="py-12 sm:py-16 lg:py-20 bg-background relative overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Title */}
         <div className="text-center mb-12">
@@ -20,15 +91,15 @@ const NewContactSection = () => {
             <AnimatedText text="Get In " />
             <AnimatedText text="Touch" className="gradient-text inline-block" delay={0.2} />
           </h2>
-          <p className="text-muted-foreground mt-3 max-w-2xl mx-auto text-lg">
-            Connect with me for collaborations, opportunities, or just to say hi!
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Ready to bring your ideas to life? Let's discuss your project and create something amazing together.
           </p>
         </div>
 
-        {/* Modern Bento Grid with blue theme */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Contact Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
           {/* Email */}
-          <Card href="mailto:riteshnvisonex@gmail.com">
+          <Card href="mailto:riteshnvisonex@gmail.com?subject=Project%20Inquiry&body=Hello%20I%20am%20interested%20in%20your%20services.%20Please%20let%20me%20know%20your%20availability%20for%20a%20discussion.">
             <IconBox color="bg-gradient-primary">
               <Mail className="text-white w-6 h-6 drop-shadow-sm" />
             </IconBox>
@@ -40,7 +111,7 @@ const NewContactSection = () => {
           </Card>
 
           {/* WhatsApp */}
-          <Card href="https://wa.me/918660144040">
+          <Card href="https://wa.me/918660144040?text=Hello%20I%20would%20like%20to%20discuss%20a%20project%20with%20you.%20Please%20let%20me%20know%20your%20availability.">
             <IconBox color="bg-green-500">
               <WhatsAppIcon width={24} height={24} />
             </IconBox>
@@ -59,7 +130,7 @@ const NewContactSection = () => {
             <CardTitle>LinkedIn</CardTitle>
             <CardDesc>Professional network</CardDesc>
             <CardButton>
-              Connect
+              connect with me
             </CardButton>
           </Card>
 
@@ -76,47 +147,16 @@ const NewContactSection = () => {
           </Card>
         </div>
       </div>
+
+      <WhatsAppPopup
+        isOpen={whatsappPopup.isOpen}
+        onClose={() => setWhatsappPopup(prev => ({ ...prev, isOpen: false }))}
+        onSubmit={handleWhatsappSubmit}
+        title={whatsappPopup.title}
+        description={whatsappPopup.description}
+      />
     </section>
   );
 };
-
-/* Reusable Card Components */
-const Card = ({ children, href }) => (
-  <a
-    href={href}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="group rounded-2xl p-6 bg-card/50 backdrop-blur-sm border border-border/50 shadow-lg hover:shadow-2xl transform hover:scale-[1.05] transition-all duration-500 cursor-pointer block hover:-translate-y-2 relative overflow-hidden"
-  >
-    {children}
-  </a>
-);
-
-const IconBox = ({ children, color }) => (
-  <div className={`w-12 h-12 ${color} rounded-xl flex items-center justify-center mb-4 shadow-lg hover:scale-110 transition-all duration-300 group-hover:rotate-3 group-hover:shadow-xl`}>
-    {children}
-  </div>
-);
-
-const CardTitle = ({ children }) => (
-  <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
-    {children}
-  </h3>
-);
-
-const CardDesc = ({ children }) => (
-  <p className="text-muted-foreground mb-4 text-sm group-hover:text-foreground/80 transition-colors duration-300">
-    {children}
-  </p>
-);
-
-const CardButton = ({ children }) => (
-  <div
-    className="inline-flex items-center px-4 py-2 rounded-xl text-primary-foreground font-medium transition-all duration-300 bg-gradient-primary cursor-pointer shadow-md hover:shadow-lg transform group-hover:scale-105 group-hover:-translate-y-1"
-  >
-    <span className="mr-2">{children}</span>
-    <Send className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-  </div>
-);
 
 export default NewContactSection;

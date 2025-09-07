@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MessageCircle, Mail, Phone, MapPin, Send, Clock } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import WhatsAppPopup from "@/components/WhatsAppPopup";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -18,6 +19,30 @@ const Contact = () => {
   });
 
   const { toast } = useToast();
+  const [whatsappPopup, setWhatsappPopup] = useState({
+    isOpen: false,
+    message: "",
+    title: "",
+    description: "",
+    formType: "basic" as "basic" | "joinTeam",
+  });
+
+  const handleWhatsappClick = () => {
+    const message = "Hello! I would like to discuss a project with you. Please let me know your availability.";
+    setWhatsappPopup({
+      isOpen: true,
+      message,
+      title: "Contact via WhatsApp",
+      description: "Please provide your details so we can start the conversation.",
+      formType: "basic",
+    });
+  };
+
+  const handleWhatsappSubmit = (userData: { name: string; email: string }) => {
+    const fullMessage = `Hello! My name is ${userData.name} and my email is ${userData.email}.\n\n${whatsappPopup.message}`;
+    const whatsappUrl = `https://wa.me/+919876543210?text=${encodeURIComponent(fullMessage)}`;
+    window.open(whatsappUrl, "_blank");
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,17 +89,11 @@ const Contact = () => {
                   <p className="text-muted-foreground mb-6">
                     Get instant response on WhatsApp for quick queries and discussions.
                   </p>
-                  <Button 
+                  <Button
                     className="w-full bg-green-500 hover:bg-green-600 text-white"
-                    asChild
+                    onClick={handleWhatsappClick}
                   >
-                    <a 
-                      href="https://wa.me/+919876543210" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                    >
-                      Chat on WhatsApp
-                    </a>
+                    Chat on WhatsApp
                   </Button>
                 </Card>
 
@@ -86,7 +105,12 @@ const Contact = () => {
                     </div>
                     <div>
                       <div className="font-medium">Email</div>
-                      <div className="text-muted-foreground">alex@growvo.dev</div>
+                      <a 
+                        href="mailto:alex@growvo.dev?subject=Project%20Inquiry&body=Hello%20I%20am%20interested%20in%20your%20services.%20Please%20let%20me%20know%20your%20availability%20for%20a%20discussion." 
+                        className="text-muted-foreground hover:text-primary transition-colors duration-200"
+                      >
+                        alex@growvo.dev
+                      </a>
                     </div>
                   </div>
 
@@ -252,6 +276,14 @@ const Contact = () => {
           </div>
         </section>
       </main>
+
+      <WhatsAppPopup
+        isOpen={whatsappPopup.isOpen}
+        onClose={() => setWhatsappPopup(prev => ({ ...prev, isOpen: false }))}
+        onSubmit={handleWhatsappSubmit}
+        title={whatsappPopup.title}
+        description={whatsappPopup.description}
+      />
     </div>
   );
 };
