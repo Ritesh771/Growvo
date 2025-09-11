@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AnimatedText } from "@/components/AnimatedText";
 import { Github, Linkedin, Mail, Send } from 'lucide-react';
-import WhatsAppPopup from "@/components/WhatsAppPopup";
 
 // WhatsApp SVG Icon
 const WhatsAppIcon = (props) => (
@@ -12,34 +11,8 @@ const WhatsAppIcon = (props) => (
 );
 
 const NewContactSection = () => {
-  const [whatsappPopup, setWhatsappPopup] = useState({
-    isOpen: false,
-    message: "",
-    title: "",
-    description: "",
-    formType: "basic" as "basic" | "joinTeam",
-  });
-
   const handleCardClick = (href: string, e: React.MouseEvent) => {
-    if (href.includes('wa.me')) {
-      e.preventDefault();
-      // Extract message from URL
-      const url = new URL(href);
-      const text = url.searchParams.get('text') || '';
-      setWhatsappPopup({
-        isOpen: true,
-        message: decodeURIComponent(text),
-        title: "Contact via WhatsApp",
-        description: "Please provide your details so we can start the conversation.",
-        formType: "basic",
-      });
-    }
-  };
-
-  const handleWhatsappSubmit = (userData: { name: string; email: string }) => {
-    const fullMessage = `Hello! My name is ${userData.name} and my email is ${userData.email}.\n\n${whatsappPopup.message}`;
-    const whatsappUrl = `https://wa.me/918660144040?text=${encodeURIComponent(fullMessage)}`;
-    window.open(whatsappUrl, "_blank");
+    // No popup for WhatsApp, let it open directly
   };
 
   /* Reusable Card Components */
@@ -111,7 +84,7 @@ const NewContactSection = () => {
           </Card>
 
           {/* WhatsApp */}
-          <Card href="https://wa.me/918660144040?text=Hello%20I%20would%20like%20to%20discuss%20a%20project%20with%20you.%20Please%20let%20me%20know%20your%20availability.">
+          <Card href="https://wa.me/918660144040?text=Hi%20Ritesh,%20I'm%20interested%20in%20your%20services.%20Can%20we%20discuss%20a%20project?">
             <IconBox color="bg-green-500">
               <WhatsAppIcon width={24} height={24} />
             </IconBox>
@@ -147,14 +120,6 @@ const NewContactSection = () => {
           </Card>
         </div>
       </div>
-
-      <WhatsAppPopup
-        isOpen={whatsappPopup.isOpen}
-        onClose={() => setWhatsappPopup(prev => ({ ...prev, isOpen: false }))}
-        onSubmit={handleWhatsappSubmit}
-        title={whatsappPopup.title}
-        description={whatsappPopup.description}
-      />
     </section>
   );
 };

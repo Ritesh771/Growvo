@@ -1,7 +1,9 @@
 import Navbar from "@/components/Navbar";
 import ServiceCard from "@/components/ServiceCard";
 import PricingTable from "@/components/PricingTable";
+import DemoRequestPopup from "@/components/DemoRequestPopup";
 import { Code, Smartphone, Brain, Briefcase } from "lucide-react";
+import { useState } from "react";
 
 const Services = () => {
   const services = [
@@ -71,6 +73,29 @@ const Services = () => {
     }
   ];
 
+  const [demoRequestPopup, setDemoRequestPopup] = useState({
+    isOpen: false,
+    title: "",
+    description: "",
+    defaultDemo: "",
+    availableDemos: [] as string[],
+  });
+
+  const handleServiceClick = (service: any) => {
+    setDemoRequestPopup({
+      isOpen: true,
+      title: `Service Inquiry: ${service.title}`,
+      description: "Please provide your details so we can discuss your service requirements.",
+      defaultDemo: service.title,
+      availableDemos: services.map(s => s.title),
+    });
+  };
+
+  const handleDemoSubmit = (data: any) => {
+    console.log("Demo request submitted:", data);
+    // Handle form submission here
+  };
+
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -94,7 +119,11 @@ const Services = () => {
           <div className="container mx-auto px-6">
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {services.map((service, index) => (
-                <ServiceCard key={index} {...service} />
+                <ServiceCard 
+                  key={index} 
+                  {...service} 
+                  onClick={() => handleServiceClick(service)}
+                />
               ))}
             </div>
           </div>
@@ -103,6 +132,16 @@ const Services = () => {
         {/* Pricing Table */}
         <PricingTable />
       </main>
+
+      <DemoRequestPopup
+        isOpen={demoRequestPopup.isOpen}
+        onClose={() => setDemoRequestPopup(prev => ({ ...prev, isOpen: false }))}
+        onSubmit={handleDemoSubmit}
+        title={demoRequestPopup.title}
+        description={demoRequestPopup.description}
+        defaultDemo={demoRequestPopup.defaultDemo}
+        availableDemos={demoRequestPopup.availableDemos}
+      />
     </div>
   );
 };

@@ -22,6 +22,8 @@ import Autoplay from "embla-carousel-autoplay";
 import growvoLogo from "@/assets/growvo-logo.png";
 import Footer from "@/components/Footer";
 import WhatsAppPopup from "@/components/WhatsAppPopup";
+import CareerServicePopup from "@/components/CareerServicePopup";
+import DemoRequestPopup from "@/components/DemoRequestPopup";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -30,10 +32,24 @@ const SinglePagePortfolio = () => {
   const [activeFilter, setActiveFilter] = useState("All");
   const [whatsappPopup, setWhatsappPopup] = useState({
     isOpen: false,
-    message: "",
     title: "",
     description: "",
-    formType: "basic" as "basic" | "joinTeam",
+    formType: "basic" as "basic" | "joinTeam" | "demo" | "customQuote",
+  });
+
+  const [careerServicePopup, setCareerServicePopup] = useState({
+    isOpen: false,
+    title: "",
+    description: "",
+    defaultInterest: "",
+  });
+
+  const [demoRequestPopup, setDemoRequestPopup] = useState({
+    isOpen: false,
+    title: "",
+    description: "",
+    defaultDemo: "",
+    availableDemos: [] as string[],
   });
 
   const plugin = useRef(
@@ -513,32 +529,33 @@ const SinglePagePortfolio = () => {
 
   const whatsappNumber = "+918660144040";
 
-  const handleCareerServiceClick = (serviceTitle: string) => {
-    const message = `Hello, I'm interested in your ${serviceTitle} service. Please let me know how to proceed.`;
-    setWhatsappPopup({
-      isOpen: true,
-      message,
-      title: `Interest in ${serviceTitle}`,
-      description: "Please provide your details so we can discuss your requirements.",
-      formType: "basic",
-    });
+  const handleCareerServiceSubmit = (userData: any) => {
+    const message = `Hello! My name is ${userData.name} and my email is ${userData.email}. My phone number is ${userData.phone}.\n\nI'm interested in: ${userData.interest}\nPreferred contact method: ${userData.preferredContact}\nHow I heard about you: ${userData.howHeard}\n\nI consent to being contacted regarding my inquiry.`;
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank");
   };
 
-  const handleWhatsappSubmit = (userData: any) => {
-    let fullMessage = `Hello! My name is ${userData.name} and my email is ${userData.email}.\n\n${whatsappPopup.message}`;
-
-    // Add additional details for join team form
-    if (userData.experience || userData.skills || userData.availability) {
-      fullMessage += `\n\n--- Professional Details ---`;
-      if (userData.experience) fullMessage += `\nExperience: ${userData.experience} years`;
-      if (userData.skills && userData.skills.length > 0) fullMessage += `\nSkills: ${userData.skills.join(", ")}`;
-      if (userData.availability) fullMessage += `\nAvailability: ${userData.availability}`;
-      if (userData.github) fullMessage += `\nGitHub: ${userData.github}`;
-      if (userData.linkedin) fullMessage += `\nLinkedIn: ${userData.linkedin}`;
-    }
-
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(fullMessage)}`;
+  const handleDemoRequestSubmit = (userData: any) => {
+    const message = `Hello! My name is ${userData.name} and my email is ${userData.email}. My phone number is ${userData.phone}.\n\nI'm interested in a demo of: ${userData.demo}\nPreferred contact method: ${userData.preferredContact}\nHow I heard about you: ${userData.howHeard}\n\nI consent to being contacted regarding my demo request.`;
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
+  };
+
+  const handleCareerServiceClick = (serviceTitle: string) => {
+    // Map service titles to interest values
+    const interestMap: { [key: string]: string } = {
+      "Resume Design": "Resume Design",
+      "LinkedIn Optimization": "LinkedIn Optimization",
+      "Interview Coaching": "Interview Coaching",
+      "Portfolio Website": "Portfolio Website"
+    };
+
+    setCareerServicePopup({
+      isOpen: true,
+      title: `Interest in ${serviceTitle}`,
+      description: "Please provide your details so we can discuss your career service requirements.",
+      defaultInterest: interestMap[serviceTitle] || "",
+    });
   };
 
   const careerServices = [
@@ -795,21 +812,13 @@ const SinglePagePortfolio = () => {
                     <ServiceCard 
                       {...service} 
                       onClick={(href: string) => {
-                        if (href.includes('wa.me')) {
-                          // Extract message from URL
-                          const url = new URL(href);
-                          const text = url.searchParams.get('text') || '';
-                          setWhatsappPopup({
-                            isOpen: true,
-                            message: decodeURIComponent(text),
-                            title: `Interest in ${service.title}`,
-                            description: "Please provide your details so we can discuss your requirements.",
-                            formType: "basic",
-                          });
-                        } else {
-                          // Handle other external links
-                          window.open(href, '_blank');
-                        }
+                        setDemoRequestPopup({
+                          isOpen: true,
+                          title: `Service Inquiry: ${service.title}`,
+                          description: "Please provide your details so we can discuss your service requirements.",
+                          defaultDemo: service.title,
+                          availableDemos: services.map(s => s.title),
+                        });
                       }}
                     />
                   </motion.div>
@@ -1113,10 +1122,8 @@ const SinglePagePortfolio = () => {
                     size="lg"
                     className="btn-gradient text-lg px-8 py-6 rounded-2xl hover:shadow-hover transition-smooth"
                     onClick={() => {
-                      const message = `Hi Ritesh, I'm interested in joining your team to work on client projects. I would like to discuss the opportunities available and how I can contribute to your company's success. Could you please share more details about the current projects, team structure, and the application process? I'm excited about the possibility of working together on innovative solutions.`;
                       setWhatsappPopup({
                         isOpen: true,
-                        message,
                         title: "Join Our Team",
                         description: "Please provide your professional details so we can discuss career opportunities.",
                         formType: "joinTeam",
@@ -1231,13 +1238,12 @@ const SinglePagePortfolio = () => {
                               size="sm"
                               className="flex-1"
                               onClick={() => {
-                                const message = `Hi Ritesh, I'm interested in seeing a live demo of your ${project.title} project. ${project.description.substring(0, 100)}... Could you please arrange a live demonstration? I'd love to see the features and discuss the technical implementation.`;
-                                setWhatsappPopup({
+                                setDemoRequestPopup({
                                   isOpen: true,
-                                  message,
                                   title: `Demo Request: ${project.title}`,
                                   description: "Please provide your details so we can schedule a demo.",
-                                  formType: "basic",
+                                  defaultDemo: project.title,
+                                  availableDemos: projects.map(p => p.title),
                                 });
                               }}
                             >
@@ -1366,10 +1372,28 @@ const SinglePagePortfolio = () => {
       <WhatsAppPopup
         isOpen={whatsappPopup.isOpen}
         onClose={() => setWhatsappPopup(prev => ({ ...prev, isOpen: false }))}
-        onSubmit={handleWhatsappSubmit}
         title={whatsappPopup.title}
         description={whatsappPopup.description}
         formType={whatsappPopup.formType}
+      />
+
+      <CareerServicePopup
+        isOpen={careerServicePopup.isOpen}
+        onClose={() => setCareerServicePopup(prev => ({ ...prev, isOpen: false }))}
+        onSubmit={handleCareerServiceSubmit}
+        title={careerServicePopup.title}
+        description={careerServicePopup.description}
+        defaultInterest={careerServicePopup.defaultInterest}
+      />
+
+      <DemoRequestPopup
+        isOpen={demoRequestPopup.isOpen}
+        onClose={() => setDemoRequestPopup(prev => ({ ...prev, isOpen: false }))}
+        onSubmit={handleDemoRequestSubmit}
+        title={demoRequestPopup.title}
+        description={demoRequestPopup.description}
+        defaultDemo={demoRequestPopup.defaultDemo}
+        availableDemos={demoRequestPopup.availableDemos}
       />
     </div>
   );

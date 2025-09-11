@@ -4,6 +4,7 @@ import { Check, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import WhatsAppPopup from "@/components/WhatsAppPopup";
+import PricingPlanPopup from "@/components/PricingPlanPopup";
 
 const PricingTable = () => {
   const whatsappNumber = "+918660144040";
@@ -12,35 +13,41 @@ const PricingTable = () => {
     message: "",
     title: "",
     description: "",
-    formType: "basic" as "basic" | "joinTeam",
+    formType: "basic" as "basic" | "joinTeam" | "demo" | "customQuote",
+  });
+
+  const [pricingPlanPopup, setPricingPlanPopup] = useState({
+    isOpen: false,
+    title: "",
+    description: "",
+    defaultPlan: "",
   });
 
   const handleGetStarted = (planName: string, price: string) => {
-    const message = `Hello, I am writing to express my interest in your services. I would like to get started with the ${planName} plan, priced at ${price}. I have reviewed the features and believe it is a good fit for my project. Please let me know the next steps to proceed. Thank you.`;
-    setWhatsappPopup({
+    setPricingPlanPopup({
       isOpen: true,
-      message,
       title: `Interest in ${planName} Plan`,
       description: "Please provide your details so we can discuss your project requirements.",
-      formType: "basic",
+      defaultPlan: planName,
     });
   };
 
   const handleCustomQuote = () => {
-    const message = "Hello, I am writing to request a custom quote for my project. I have a unique set of requirements that do not seem to fit into your existing plans. I would appreciate it if we could discuss the project details and get a custom quote. Please let me know your availability for a brief call. Thank you.";
-    setWhatsappPopup({
-      isOpen: true,
-      message,
-      title: "Custom Quote Request",
-      description: "Please provide your details so we can discuss your custom requirements.",
-      formType: "basic",
-    });
+    const message = "Hi Ritesh, I'm interested in a custom quote for my project. Can we discuss my specific requirements?";
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank");
   };
 
   const handleWhatsappSubmit = (userData: { name: string; email: string }) => {
     const fullMessage = `Hello! My name is ${userData.name} and my email is ${userData.email}.\n\n${whatsappPopup.message}`;
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(fullMessage)}`;
     window.open(whatsappUrl, "_blank");
+  };
+
+  const handlePricingPlanSubmit = (userData: any) => {
+    // Form data is already submitted to Google Form in PricingPlanPopup
+    // No additional WhatsApp message needed
+    console.log('Pricing plan form submitted successfully:', userData);
   };
 
   const plans = [
@@ -188,6 +195,16 @@ const PricingTable = () => {
         onSubmit={handleWhatsappSubmit}
         title={whatsappPopup.title}
         description={whatsappPopup.description}
+        formType={whatsappPopup.formType}
+      />
+
+      <PricingPlanPopup
+        isOpen={pricingPlanPopup.isOpen}
+        onClose={() => setPricingPlanPopup(prev => ({ ...prev, isOpen: false }))}
+        onSubmit={handlePricingPlanSubmit}
+        title={pricingPlanPopup.title}
+        description={pricingPlanPopup.description}
+        defaultPlan={pricingPlanPopup.defaultPlan}
       />
     </>
   );
