@@ -21,27 +21,22 @@ const Contact = () => {
   const { toast } = useToast();
   const [whatsappPopup, setWhatsappPopup] = useState({
     isOpen: false,
-    message: "",
     title: "",
     description: "",
-    formType: "basic" as "basic" | "joinTeam",
+    formType: "basic" as "basic" | "joinTeam" | "demo" | "customQuote",
   });
 
   const handleWhatsappClick = () => {
-    const message = "Hello! I would like to discuss a project with you. Please let me know your availability.";
     setWhatsappPopup({
       isOpen: true,
-      message,
-      title: "Contact via WhatsApp",
-      description: "Please provide your details so we can start the conversation.",
+      title: "Get in Touch",
+      description: "Please provide your details so we can personalize our conversation.",
       formType: "basic",
     });
   };
 
-  const handleWhatsappSubmit = (userData: { name: string; email: string }) => {
-    const fullMessage = `Hello! My name is ${userData.name} and my email is ${userData.email}.\n\n${whatsappPopup.message}`;
-    const whatsappUrl = `https://wa.me/+919876543210?text=${encodeURIComponent(fullMessage)}`;
-    window.open(whatsappUrl, "_blank");
+  const handleWhatsappSubmit = () => {
+    // Submission handled internally by WhatsAppPopup
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -280,9 +275,9 @@ const Contact = () => {
       <WhatsAppPopup
         isOpen={whatsappPopup.isOpen}
         onClose={() => setWhatsappPopup(prev => ({ ...prev, isOpen: false }))}
-        onSubmit={handleWhatsappSubmit}
         title={whatsappPopup.title}
         description={whatsappPopup.description}
+        formType={whatsappPopup.formType}
       />
     </div>
   );

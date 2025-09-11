@@ -151,3 +151,48 @@
 
   <img src="https://img.shields.io/badge/Made_with_❤️_by_Growvo-FF6B6B?style=for-the-badge" alt="Made with love" />
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+I want to collect user inquiries and collaboration requests on my portfolio site using a popup modal form.
+Requirements:
+
+The popup should open when users click any “Contact”, “Request Demo”, “Join Us”, or service inquiry button.
+The popup form should be responsive and work on mobile and desktop.
+The form fields should match my Google Form, including:
+Name, Email, Phone number, Service interested in, Project/Inquiry details
+For “Join Us”: Skills, Years of experience, Availability, GitHub, LinkedIn, Motivation
+For all: Preferred contact method, Consent, How did you hear about us?
+On submit, the form data should be sent to my Google Form using a POST request (use the correct field IDs).
+Show an animated confirmation message after successful submission.
+Do not use WhatsApp logic—only Google Form submission.
+The popup should overlay all content and close automatically after confirmation.
+
+Create a reusable popup modal component (WhatsAppPopup or similar).
+Add all required form fields, with validation.
+Trigger the popup from all relevant buttons in your main page.
+On submit, send data to Google Form using fetch and show a confirmation animation.
+
+
+
+
+
+
+https://docs.google.com/forms/d/e/1FAIpQLSeeVQ33RuCehFCnKTdIkEXpFSWogSa-0RguoUf2i3aWUrOOPw/viewform?usp=pp_url&entry.2127883985=ggg&entry.549814473=gggg&entry.1015284873=ggg&entry.784674507=AI/ML&entry.1352433805=gggg&entry.998482839=Front-end+Development&entry.998482839=Back-end+Development&entry.275873897=Less+than+1+year&entry.46260959=Full-time&entry.1337972636=ggg&entry.1625215226=gggg&entry.24813916=gggg&entry.1044553323=Social+Media&entry.435038658=Email&entry.948365495=Yes.   check the IDS
+
+
+
+https://docs.google.com/forms/d/e/1FAIpQLSeeVQ33RuCehFCnKTdIkEXpFSWogSa-0RguoUf2i3aWUrOOPw/formResponse
+
+https://forms.gle/2AN9sxLY93FKiGtL9.    this is that form link
