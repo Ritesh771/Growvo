@@ -54,13 +54,13 @@ const PricingTable = () => {
     {
       name: "Small",
       subtitle: "Perfect for startups",
-      price: "₹10,000",
+      price: "₹7,000",
       duration: "2-3 weeks",
       popular: false,
       features: [
-        "Single page application",
+        "Multi page application",
         "Responsive design",
-        "Basic SEO optimization",
+        "SEO optimization",
         "Contact form integration",
         "2 rounds of revisions",
         "Basic deployment",
@@ -70,7 +70,7 @@ const PricingTable = () => {
     {
       name: "Medium",
       subtitle: "Most popular choice",
-      price: "₹27,000",
+      price: "₹12,000",
       duration: "4-6 weeks",
       popular: true,
       features: [
@@ -87,7 +87,7 @@ const PricingTable = () => {
     {
       name: "Large",
       subtitle: "Enterprise solution",
-      price: "₹35,000",
+      price: "₹17,000",
       duration: "8-12 weeks",
       popular: false,
       features: [

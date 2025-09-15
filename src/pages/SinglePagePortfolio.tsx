@@ -332,7 +332,7 @@ const SinglePagePortfolio = () => {
     {
       title: "Web Development",
       description: "Full-stack web applications with modern technologies like React, Django, and Node.js.",
-      price: "₹7000",
+      price: "₹3500",
       icon: Server,
       features: [
         "Responsive design",
@@ -348,7 +348,7 @@ const SinglePagePortfolio = () => {
     {
       title: "Mobile Apps",
       description: "Cross-platform mobile applications with React Native and Flutter.",
-      price: "₹15,000",
+      price: "₹5000",
       icon: TabletSmartphone,
       features: [
         "iOS & Android",
@@ -364,7 +364,7 @@ const SinglePagePortfolio = () => {
     {
       title: "AI/ML Solutions",
       description: "Intelligent applications with machine learning and artificial intelligence.",
-      price: "₹20,000",
+      price: "₹7,000",
       icon: Brain,
       features: [
         "Custom AI models",
@@ -380,7 +380,7 @@ const SinglePagePortfolio = () => {
     {
       title: "Career Services",
       description: "Professional career development and placement assistance.",
-      price: "₹5,000",
+      price: "₹2,000",
       icon: Users,
       features: [
         "Resume design",
@@ -699,68 +699,7 @@ const SinglePagePortfolio = () => {
               </ScrollReveal>
             </motion.div>
 
-            {/* CEO Section */}
-            <div className="mb-10">
-              <ScrollReveal>
-                <motion.div 
-                  className="text-center mb-16"
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, margin: "-50px" }}
-                  variants={fadeInVariants}
-                >
-                  <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                    Meet Our <span className="gradient-text">CEO</span>
-                  </h2>
-                  <div className="max-w-4xl mx-auto">
-                    <motion.div 
-                      className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center"
-                      variants={containerVariants}
-                      initial="hidden"
-                      whileInView="visible"
-                      viewport={{ once: true, margin: "-100px" }}
-                    >
-                      <motion.div 
-                        className="text-left order-2 md:order-1"
-                        variants={itemVariants}
-                      >
-                        <h3 className="text-2xl font-bold mb-4">Ritesh N</h3>
-                        <p className="text-primary font-medium mb-4">Founder & CEO</p>
-                        <p className="text-muted-foreground mb-6">
-                          Visionary leader with a passion for technology and innovation. With expertise in full-stack development and AI/ML, Ritesh founded Stalight Technology to create meaningful digital solutions that transform businesses and enhance user experiences.
-                        </p>
-                        <motion.div 
-                          variants={itemVariants}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <Button
-                            className="btn-gradient hover:shadow-hover transition-smooth"
-                            onClick={() => window.open('https://riteshn.me', '_blank')}
-                          >
-                            Visit My Portfolio
-                          </Button>
-                        </motion.div>
-                      </motion.div>
-                      <motion.div 
-                        className="flex justify-center order-1 md:order-2"
-                        variants={itemVariants}
-                        whileHover={{ scale: 1.05, rotate: 2 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        <div className="w-32 h-32 md:w-48 md:h-48 rounded-2xl overflow-hidden shadow-card float">
-                          <LazyImage
-                            src="/Ritesh.jpg"
-                            alt="Ritesh N - CEO"
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      </motion.div>
-                    </motion.div>
-                  </div>
-                </motion.div>
-              </ScrollReveal>
-            </div>
+            
 
             {/* Certificates & Achievements */}
           </div>
