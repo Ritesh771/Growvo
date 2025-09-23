@@ -66,7 +66,7 @@ const Advertisement = () => {
     <AnimatePresence>
       {isOpen && (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogContent className="w-full max-w-xs sm:max-w-lg border-0 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white overflow-hidden p-2 sm:p-6 rounded-xl">
+          <DialogContent className="w-full max-w-xs sm:max-w-lg border-0 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white overflow-hidden p-2 sm:p-6 rounded-xl [&>button]:hidden">
             {/* Animated background elements */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
               <motion.div
@@ -138,7 +138,7 @@ const Advertisement = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Badge className="text-lg sm:text-2xl px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-red-500 to-orange-500 text-white border-0 shadow-2xl animate-pulse select-none focus:outline-none focus:ring-0">
+                  <Badge className="text-lg sm:text-2xl px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-red-500 to-orange-500 animate-pulse select-none focus:outline-none focus:ring-0">
                     
                     30% OFF ON EVERYTHING!
                   </Badge>
