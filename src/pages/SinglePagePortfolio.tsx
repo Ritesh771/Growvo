@@ -529,17 +529,28 @@ const SinglePagePortfolio = () => {
 
   const whatsappNumber = "+918660144040";
 
-  const handleCareerServiceSubmit = (userData: any) => {
-    const message = `Hello! My name is ${userData.name} and my email is ${userData.email}. My phone number is ${userData.phone}.\n\nI'm interested in: ${userData.interest}\nPreferred contact method: ${userData.preferredContact}\nHow I heard about you: ${userData.howHeard}\n\nI consent to being contacted regarding my inquiry.`;
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank");
-  };
+  const handleCareerServiceSubmit = async (userData: any) => {
+  const success = await submitToGoogleForm(userData, "careerService");
+  if (success) {
+    setShowSuccess(true);
+    setTimeout(() => {
+      setShowSuccess(false);
+      onClose(); // close popup
+    }, 2000);
+  }
+};
 
-  const handleDemoRequestSubmit = (userData: any) => {
-    const message = `Hello! My name is ${userData.name} and my email is ${userData.email}. My phone number is ${userData.phone}.\n\nI'm interested in a demo of: ${userData.demo}\nPreferred contact method: ${userData.preferredContact}\nHow I heard about you: ${userData.howHeard}\n\nI consent to being contacted regarding my demo request.`;
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank");
-  };
+const handleDemoRequestSubmit = async (userData: any) => {
+  const success = await submitToGoogleForm(userData, "demoRequest");
+  if (success) {
+    setShowSuccess(true);
+    setTimeout(() => {
+      setShowSuccess(false);
+      onClose(); // close popup
+    }, 2000);
+  }
+};
+
 
   const handleCareerServiceClick = (serviceTitle: string) => {
     // Map service titles to interest values
