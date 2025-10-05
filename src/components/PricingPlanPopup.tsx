@@ -238,9 +238,9 @@ const PricingPlanPopup = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Small">Small Plan</SelectItem>
-                      <SelectItem value="Medium">Medium Plan</SelectItem>
-                      <SelectItem value="Large">Large Plan</SelectItem>
+                      <SelectItem value="Small Plan">Small Plan</SelectItem>
+                      <SelectItem value="Medium Plan">Medium Plan</SelectItem>
+                      <SelectItem value="Large Plan">Large Plan</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

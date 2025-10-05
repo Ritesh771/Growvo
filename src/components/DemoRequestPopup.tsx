@@ -52,17 +52,17 @@ type DemoRequestFormValues = z.infer<typeof demoRequestFormSchema>;
 const submitToGoogleForm = async (data: DemoRequestFormValues) => {
   const formData = new URLSearchParams();
 
-  formData.append("entry.29456833", data.name);
-  formData.append("entry.972921336", data.email);
-  formData.append("entry.1163255132", data.phone);
-  formData.append("entry.1033293189", data.howHeard);
-  formData.append("entry.398675917", data.preferredContact);
-  formData.append("entry.843035178", data.consent ? "Yes" : "No");
-  formData.append("entry.1138033603", data.demo);
+  formData.append("entry.1281215578", data.name);
+  formData.append("entry.1544666143", data.email);
+  formData.append("entry.1323833081", data.phone);
+  formData.append("entry.397320121", data.howHeard);
+  formData.append("entry.1834734913", data.preferredContact);
+  formData.append("entry.1887385685", data.consent ? "Yes, I consent to being contacted regarding my inquiry" : "No");
+  formData.append("entry.1299762502", data.demo);
 
   try {
     await fetch(
-      "https://docs.google.com/forms/d/e/1FAIpQLSdVmeRzLwjcp_NgJc0Pqo1NnRmvaZY1mHoqwmQNQ0PDeKmzdA/formResponse",
+      "https://docs.google.com/forms/d/e/1FAIpQLSevW4FY7YJFpG1k8d2L055m-ArBy6jauNIQW1SImTeEtwdEFA/formResponse",
       {
         method: "POST",
         body: formData,
